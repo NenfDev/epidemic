@@ -1,0 +1,76 @@
+v: 1.1
+internal_name: "drug_addiction"
+display_name: "Drug addiction"
+infectious: false
+infectious_chance: 0
+non_infectious_chance: 0
+contagious_chance_boost: 0
+deliberate_transmission_chance: 0
+biome_infectious_chance: []
+max_immunity: 0
+immunity_modifier: 0
+report_before_symptoms: true
+warn_on_afflicted: false
+afflicted_text: ""
+symptom_text: "Your skin feels itchy"
+infected_other_text: ""
+healed_text: "You feel more like your old self"
+natural_cure_text: ""
+natural_cure_days: 0
+time_to_symptoms: 31
+is_fatal: true
+damage: 3
+cure_with_sleep_chance: 3
+cure_with_sleep_message: "You feel free again"
+fever: true
+chills: true
+display_vomit: true
+display_bleeding:
+  face: false
+  head: false
+  chest: false
+  back: false
+  left_arm: false
+  right_arm: false
+  left_leg: false
+  right_leg: false
+display_bowel: false
+display_urinate: false
+display_sweat: false
+display_contagious: false
+display_injury: false
+insomnia: true
+hallucination: true
+gibberish: false
+food_rot: false
+remove_xp: 0
+rust: false
+rust_amount: 0
+clumsy: false
+sudden_death_chance: 5
+sudden_death_message: "You twitched your last twitch"
+caused_by_fall: false
+caused_by_injury: false
+caused_by_weapon_injury: false
+caused_by_explosion: false
+caused_by_fire: false
+caused_by_water: false
+caused_by_consume: false
+caused_by_magic: false
+caused_by_entity: []
+ailment_effects:
+  SLOW:
+    time: 30
+    amplifier: 3
+  CONFUSION:
+    time: 30
+    amplifier: 3
+  WEAKNESS:
+    time: 30
+    amplifier: 3
+particle_on_heal: VILLAGER_HAPPY
+sound_on_heal: BREWING_STAND_BREW
+can_syringe: false
+can_vaccinate: false
+can_gain_immunity: false
+is_active: true

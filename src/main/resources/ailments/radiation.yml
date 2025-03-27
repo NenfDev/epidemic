@@ -1,0 +1,73 @@
+v: 1.1
+internal_name: "radiation"
+display_name: "Radiation Sickness"
+infectious: false
+infectious_chance: 0
+non_infectious_chance: 0
+contagious_chance_boost: 0
+deliberate_transmission_chance: 0
+biome_infectious_chance: []
+max_immunity: 0
+immunity_modifier: 0
+report_before_symptoms: true
+warn_on_afflicted: false
+afflicted_text: ""
+symptom_text: "You're hot and can barely see straight"
+infected_other_text: ""
+healed_text: "The swelling has gone down and you're starting to feel more like yourself"
+natural_cure_text: ""
+natural_cure_days: 0
+time_to_symptoms: 300
+is_fatal: true
+damage: 3
+cure_with_sleep_chance: 0
+cure_with_sleep_message: ""
+fever: true
+chills: false
+display_vomit: true
+display_bleeding:
+  face: false
+  head: false
+  chest: false
+  back: false
+  left_arm: false
+  right_arm: false
+  left_leg: false
+  right_leg: false
+display_bowel: false
+display_urinate: false
+display_sweat: false
+display_contagious: false
+display_injury: false
+insomnia: false
+hallucination: true
+gibberish: false
+food_rot: false
+remove_xp: 0
+rust: false
+rust_amount: 0
+clumsy: false
+sudden_death_chance: 100
+sudden_death_message: "Your cells broke down too much"
+caused_by_fall: false
+caused_by_injury: false
+caused_by_weapon_injury: false
+caused_by_explosion: false
+caused_by_fire: false
+caused_by_water: false
+caused_by_consume: false
+caused_by_magic: false
+caused_by_entity: []
+ailment_effects:
+  CONFUSION:
+    time: 10
+    amplifier: 3
+  WEAKNESS:
+    time: 20
+    amplifier: 3
+particle_on_heal: VILLAGER_HAPPY
+sound_on_heal: BREWING_STAND_BREW
+can_syringe: true
+can_vaccinate: true
+can_gain_immunity: true
+is_active: true

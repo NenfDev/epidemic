@@ -1,0 +1,32 @@
+name: Epidemic
+main: com.ibexmc.epidemic.Epidemic
+version: 1.7.12
+api-version: 1.14
+softdepend: [PlaceholderAPI]
+commands:
+  epidemic:
+    description: Runs the epidemic commands
+    usage: /epidemic
+    aliases: [epi]
+  cure:
+    description: Runs the cure commands
+    usage: /cure
+  health:
+    description: Runs the health commands
+    usage: /health
+  infect:
+    description: Runs the infect commands
+    usage: /infect
+  thirst:
+    description: Runs the thirst commands
+    usage: /thirst
+  temp:
+    description: Runs the temperature commands
+    usage: /temp
+  epigive:
+    description: Allows you to give players cures
+    usage: /epigive
+  epirecipes:
+    description: Displays the Epidemic recipes
+    usage: /epirecipes
+    aliases: [er]

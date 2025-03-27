@@ -1,0 +1,43 @@
+# Infected Splash Potion
+
+name: "&bInfected Splash Potion"
+lore:
+  - "&fAn infected splash potion"
+item:
+  - "i:"
+  - "  ==: org.bukkit.inventory.ItemStack"
+  - "  v: 1519"
+  - "  type: SPLASH_POTION"
+  - "  meta:"
+  - "    ==: ItemMeta"
+  - "    meta-type: POTION"
+  - "    potion-type: minecraft:awkward"
+# Color is the potion color (only if base_item is POTION) in name, OR red/green/blue
+# If both exist, name will always take priority
+potion_color:
+  red: 0
+  green: 0
+  blue: 0
+
+# Range is the the number of blocks the splash potion will impact
+# Nearby entities within this range are at risk of getting sick
+range: 3
+
+# Enhanced Recipes
+# Recipes are based on crafting table position
+# Entering values will force a match in that position, do not include, or, use "" or [] to not match
+# material (ItemStack base material) https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+# name (Display name, including color codes)
+# lore (Item lore, including color codes, ALL lines must match)
+# potion (Potion type if item is a potion) https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionType.html
+# data (Persistent data in key:value format)
+# amount (Only used if there is a match for material, name, lore, or data), if not entered, assumes 1
+recipe:
+  top_center:
+    data:
+      - "epidemic_equipment:infected_sample"
+    amount: 1
+  middle_center:
+    material: SPLASH_POTION
+    potion: WATER
+    amount: 1

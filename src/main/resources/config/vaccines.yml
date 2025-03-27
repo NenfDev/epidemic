@@ -1,0 +1,29 @@
+vaccines:
+  # Unique key of the ailment
+  rabies:
+    # This is the amount of protection to apply per dose, applying multiple can
+    # only reach protection level though
+   protection: 100000
+    # How often you can take a dose of the vaccine and have it make a difference
+    # based on in-game days
+    min_dose_days: 7
+    # Amount of protection to remove per in-game day, so the vaccine gets less
+    # effective over time, requiring the player to get boosters.  Setting to 0
+    # would prevent it wearing off.  Only reduces if the player is online
+    reduce_per_day: 1000
+    # When protection drops below this value from being above this value,
+    # warn_message will be provided to the user. Set to 0 to not warn
+    warn_level: 50000
+    # Message to display to the player when their vaccine drops to a certain level
+    warn_message: "&4Your rabies vaccine isn't as potent as it once was"
+    # Chance that creating the vaccine will fail, out of 100000
+    fail_chance: 5000
+    # Doctor values
+    doctor:
+      # Amount of 'doctor' xp required to make the vaccine (doesn't remove from
+      # the player, but they must have this at least to create it)
+      req_xp: 100
+      # Amount of 'doctor' xp to give to the player when they successfully create the vaccine
+      create_xp: 5
+      # Amount of 'doctor' xp to give to the player when they administer the vaccine
+      administer_xp: 5

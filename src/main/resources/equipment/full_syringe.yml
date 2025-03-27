@@ -1,0 +1,15 @@
+# Full Syringe
+
+name: "&bFull Syringe"
+lore:
+  - "&fA syringe filled with &4blood&f"
+item:
+  - "i:"
+  - "  ==: org.bukkit.inventory.ItemStack"
+  - "  v: 1519"
+  - "  type: TRIPWIRE_HOOK"
+  - "  meta:"
+  - "    ==: ItemMeta"
+  - "    meta-type: UNSPECIFIC"
+
+# Cannot be crafted

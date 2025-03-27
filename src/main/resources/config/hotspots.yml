@@ -1,0 +1,21 @@
+hotspots:
+  world:-82:64:74:
+    ailment: bubonic_plague
+    chance: 20000
+    distance: 10
+    particles:
+      show: true
+      red: 195
+      green: 236
+      blue: 238
+      size: 2
+  world:300:67:12:
+    ailment: radiation
+    chance: 90000
+    distance: 10
+    particles:
+      show: true
+      red: 46
+      green: 125
+      blue: 50
+      size: 2

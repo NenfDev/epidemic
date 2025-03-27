@@ -1,0 +1,40 @@
+# Gas Mask
+
+name: "&bGas Mask"
+lore:
+  - "&fA gas mask which filters out harmful particles"
+material: "PLAYER_HEAD"
+texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTAzNjJmY2JmMGRjMzEyMDk0ZmVjNDQ1NjRkYWJjYzczNzNlNTVhMDFkYmFkMWZhY2I2ZTg3YjBmMzkzYmQyMSJ9fX0="
+
+# Protection is how much to offset any potential contagious disease, set to a higher number than the chance to prevent all
+protection: 25000
+
+# Enhanced Recipes
+# Recipes are based on crafting table position
+# Entering values will force a match in that position, do not include, or, use "" or [] to not match
+# material (ItemStack base material)
+# name (Display name, including color codes)
+# lore (Item lore, including color codes, ALL lines must match)
+# potion (Potion type if item is a potion)
+# data (Persistent data in key:value format)
+# amount (Only used if there is a match for material, name, lore, or data), if not entered, assumes 1
+recipe:
+  top_left:
+    material: LEATHER
+  top_center:
+    material: LEATHER
+  top_right:
+    material: LEATHER
+  middle_left:
+    material: LEATHER
+  middle_center:
+    material: GLASS_PANE
+  middle_right:
+    material: LEATHER
+  bottom_left:
+    material: IRON_INGOT
+  bottom_center:
+    material: CHARCOAL
+    amount: 3
+  bottom_right:
+    material: IRON_INGOT

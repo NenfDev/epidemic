@@ -1,0 +1,20 @@
+ailment:
+  brokenleg:
+    created: 1582485410312
+    secondary_applied: true
+  wound:
+    created: 1582485410110
+    secondary_applied: false
+immunity:
+  rabies:
+    amount: 20
+  plague:
+    amount: 10
+thirst: 92
+stats:
+  others_infected: 2
+  infected_by_others: 3
+  afflicted: 6
+  cured: 2
+  infection: 1
+  blood_drawn: 0

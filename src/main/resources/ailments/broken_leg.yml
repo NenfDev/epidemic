@@ -1,0 +1,234 @@
+########################################################################################
+# Broken Leg
+# A broken leg is caused by damage caused by a fall/explosion/being attacked.
+# You can gain a secondary ailment from it if you do not treat the leg quickly.
+# It is not contagious and cannot be vaccinated for
+# Random chance is in config.yml as random_chance and for examples below, is assumed
+# to be 100,000. Examples will not be accurate if you modify random_chance
+########################################################################################
+
+# Ailment file version
+v: 1.1
+
+# Internal key name - cannot be duplicated, no spaces/special characters
+internal_name: "broken_leg"
+
+# Display name, how it appears in-game
+display_name: "Broken Leg"
+
+# Flag to indicate if the ailment is infectious
+infectious: false
+
+# Chance of getting the ailment via infectious methods
+# For a broken leg, this will always be 0 as you can't catch one, also, the infectious flag above is false
+infectious_chance: 0
+
+# Chance of getting the ailment via non-infectious methods (ie. falling)
+# This is also calculated from 1-100000 random number.  However, immunity modifiers will not alter this chance.
+# 5000/100000 = 1/20 chance
+non_infectious_chance: 5000
+
+# Chance of getting the ailment boost amount from other contagious players
+# As a broken leg is not infectious, this will always be 0
+contagious_chance_boost: 0
+
+# Chance of being given this ailment deliberately, as a broken leg cannot be transmitted, this is always 0
+deliberate_transmission_chance: 0
+
+# Maximum Immunity amount - This removes your chance of getting sick.
+# As a broken leg is not infectious, this will always be 0
+max_immunity: 0
+
+# Immunity modifier - This is the amount that your immunity increases by each
+# time you get better from an illness.  It will add on until it reaches the
+# maximum in max_immunity.
+# As a broken leg is not infectious, you cannot become immune to it, so will always be 0
+immunity_modifier: 0
+
+# Flag to indicate if the ailment should be reported in /health if symptoms aren't
+# being applied yet
+report_before_symptoms: true
+
+# Flag to indicate if the player should be warned when they get the ailment
+warn_on_afflicted: true
+
+# Message to display to the player when they get the ailment
+afflicted_text: "Your leg breaks with a sickening crack"
+
+# Message to display to the player when symptoms kick in
+symptom_text: "The pain is starting to make you nauseous"
+
+# Message to display to a player when they successfully cause an infection
+# Can use <%player%> for player name
+infected_other_text: ""
+
+# Message to display to the player when they are healed by some non-natural manner
+healed_text: "Your leg is feeling much better!"
+
+# Message to display to the player when they are healed naturally (over time)
+natural_cure_text: "Your leg has improved and you can put weight on it again"
+
+# Number of days until the ailment naturally heals - set to 0 if it does not naturally heal
+natural_cure_days: 3
+
+# Number of seconds between getting the ailment and showing symptoms
+# During this time, they are still contagious, but do not show being so
+time_to_symptoms: 0
+
+# Flag to indicate if the illness can be fatal (if false, the player will never drop
+# below half-heart from the symptoms
+is_fatal: false
+
+# Damage to apply every time the symptoms run
+damage: 1
+
+# Secondary ailments can be triggered after a set amount of time.  If there is
+# no secondary ailment, comment this section out.
+# secondary_ailment.ailment is the internal name of the ailment to apply
+# secondary_ailment.time is the number of seconds until it is applied
+secondary_ailment:
+  ailment: gangrene
+  time: 360
+
+# Chance of the ailment being cured while you sleep.  This number is out of 1000
+# Lower numbers have less chance of curing the player.  Set to 0 to never cure the
+# player, or 1000 to always cure them when sleeping
+cure_with_sleep_chance: 50
+
+# Message to send to the player when they are cured by sleeping
+cure_with_sleep_message: "Your leg feels much better after sleeping"
+
+# If temperature is enabled, fever will cause the player to overheat quicker
+# Alternately, if they are cold, this will keep them warmer
+fever: false
+
+# If temperature is enabled, chills will cause the player to get cold quicker
+# Alternately, if they are hot, this will cool them down
+chills: false
+
+# Flag to indicate if the player should vomit as a symptom
+display_vomit: false
+
+# Flags to indicate if the player should bleed as a symptom
+# Bleeding can happen at face, head, chest, back, arms and legs
+# and must be set individually.  Player can bleed from multiple
+# places
+display_bleeding:
+  face: false
+  head: false
+  chest: false
+  back: false
+  left_arm: false
+  right_arm: false
+  left_leg: true
+  right_leg: false
+
+# Flag to indicate if the player should lose bowel control as a symptom
+display_bowel: false
+
+# Flag to indicate if the player should lose bladder control as a symptom
+display_urinate: false
+
+# Flag to indicate if the player should sweat as a symptom
+display_sweat: false
+
+# Flag to indicate if particle effects should be displayed when a player is contagious
+display_contagious: false
+
+# Flag to indicate if particle effects should be displayed when a player has an injury
+display_injury: false
+
+# Flag to indicate if the player should have insomnia as a symptom - if true, the
+# player will be unable to sleep
+insomnia: false
+
+# Flag to indicate if the player should hallucinate sounds as a symptom
+hallucination: false
+
+# Flag to indicate if the players chat should turn into gibberish as a symptom
+gibberish: false
+
+# Flag to indicate if the players food should rot away as a symptom
+# Bowls/bottles will be replaced with empties
+food_rot: false
+
+# Amount of XP to remove from the player every time symptoms are applied
+remove_xp: 0
+
+# Flag to indicate if iron armor/tools/swords should rust and lose
+# durability as a symptom
+rust: false
+
+# Amount of damage to apply to each iron item if rusting
+rust_amount: 0
+
+# Flag to indicate if the player should be clumsy and cause them to drop
+# the item from the main hand (1 in 5 chance each time symptoms are applied)
+clumsy: false
+
+# Chance out of 1000 that the player will die suddenly from this ailment
+# Set to 0 for no chance, lower number is less chance
+sudden_death_chance: 0
+
+# Message to display to the player when they suddenly die of this ailment
+sudden_death_message: ""
+
+# Flag to indicate that the ailment is caused by a fall
+caused_by_fall: true
+
+# Flag to indicate if the ailment is caused by an injury
+caused_by_injury: true
+
+# Flag to indicate if the ailment is caused by a weapon (sword, axe, projectile, stick)
+caused_by_weapon_injury: true
+
+# Flag to indicate if the ailment is caused by an explosion
+caused_by_explosion: true
+
+# Flag to indicate if the ailment is caused by burning
+caused_by_fire: false
+
+# Flag to indicate if the ailment is caused by water
+caused_by_water: false
+
+# Flag to indicate if the ailment is caused by eating/drinking
+caused_by_consume: false
+
+# Flag to indicate if the ailment is caused by magic damage
+caused_by_magic: false
+
+# List of entities that can cause this
+caused_by_entity: []
+
+# Damage Chance Modifier
+# For ailment causes triggered by player damage (fall, explosion, injury etc.) if the
+# damage_chance_modifier > 0, then the damage dealt will be multiple by the damage chance
+# modifier and added to the chance of ailment.  Example, a player falls, taking 2.5 hearts
+# of damage, and triggering an ailment with a non-infectious chance of 50 and damage_chance_modifier
+# of 5.  The new non-infectious chance would be 50 + (2.5 * 5) = 50 + 12.5 = 62.5 = 63 (chance is always rounded)
+damage_chance_modifier: 5
+
+# Potion effects to apply for symptoms.  Should include the
+# potion effect type, time and amplifier
+ailment_effects:
+  SLOW:
+    time: 60
+    amplifier: 2
+
+# Particle effect to show when healed
+particle_on_heal: VILLAGER_HAPPY
+
+# Sound to play when healed
+sound_on_heal: BREWING_STAND_BREW
+
+# Flag to indicate if a vial of contaminated blood can be drawn
+can_syringe: false
+
+# Flag to indicate if a vaccination can be applied
+can_vaccinate: false
+
+# Flag to indicate if recovering from the ailment gives some immunity
+can_gain_immunity: false
+
+# Flag to indicate if this ailment should be used
+is_active: true

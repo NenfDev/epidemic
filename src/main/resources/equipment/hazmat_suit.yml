@@ -1,0 +1,135 @@
+# Hazmat Suit
+# Comes in 4 pieces: helmet, chestplate, leggings, boots
+# All must be on for bonus to be applied.
+
+name: "&bHazmat Suit"
+lore:
+  - "&fA bright yellow suit that keeps out all contagious diseases"
+
+helmet:
+  material: "PLAYER_HEAD"
+  texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjRlM2UzNmQyOGRmMTQ3NGEzZjQ2ZWVkZTBkMzNiNGQxYzNmMzhkYjE1MjM4ZTYzN2RiNDZhMzE4MWRlZjBhMSJ9fX0="
+chestplate:
+  item:
+    - "i:"
+    - "  ==: org.bukkit.inventory.ItemStack"
+    - "  v: 1519"
+    - "  type: LEATHER_CHESTPLATE"
+    - "  meta:"
+    - "    ==: ItemMeta"
+    - "    meta-type: LEATHER_ARMOR"
+    - "    color:"
+    - "      ==: Color"
+    - "      RED: 254"
+    - "      BLUE: 61"
+    - "      GREEN: 216"
+leggings:
+  item:
+    - "i:"
+    - "  ==: org.bukkit.inventory.ItemStack"
+    - "  v: 1519"
+    - "  type: LEATHER_LEGGINGS"
+    - "  meta:"
+    - "    ==: ItemMeta"
+    - "    meta-type: LEATHER_ARMOR"
+    - "    color:"
+    - "      ==: Color"
+    - "      RED: 254"
+    - "      BLUE: 61"
+    - "      GREEN: 216"
+boots:
+  item:
+    - "i:"
+    - "  ==: org.bukkit.inventory.ItemStack"
+    - "  v: 1519"
+    - "  type: LEATHER_BOOTS"
+    - "  meta:"
+    - "    ==: ItemMeta"
+    - "    meta-type: LEATHER_ARMOR"
+    - "    color:"
+    - "      ==: Color"
+    - "      RED: 254"
+    - "      BLUE: 61"
+    - "      GREEN: 216"
+
+# Protection is how much to offset any potential contagious disease, set to a higher number than the chance to prevent all
+protection: 1000000
+
+# Chance of the hazmat suit being destroyed when the player takes damage
+# Number is out of 10. Damage can be from BLOCK_EXPLOSION, CONTACT, ENTITY_ATTACK, ENTITY_EXPLOSION, ENTITY_SWEEP_ATTACK,
+# FALL, FALLING_BLOCK, FIRE, FIRE_TICK, HOT_FLOOR, LAVA, LIGHTNING< MAGIC, PROJECTILE, SONIC_BOOM, THORNS, VOID, WITHER
+destroy_chance: 5
+
+# Enhanced Recipes
+# Recipes are based on crafting table position
+# Entering values will force a match in that position, do not include, or, use "" or [] to not match
+# material (ItemStack base material)
+# name (Display name, including color codes)
+# lore (Item lore, including color codes, ALL lines must match)
+# potion (Potion type if item is a potion)
+# data (Persistent data in key:value format)
+# amount (Only used if there is a match for material, name, lore, or data), if not entered, assumes 1
+recipe:
+  top_left:
+    material: YELLOW_CARPET
+    name: ""
+    lore: []
+    data:
+      - "epidemic_equipment:hazmat_part2"
+    amount: 1
+  top_center:
+    material: YELLOW_CARPET
+    name: ""
+    lore: []
+    data:
+      - "epidemic_equipment:hazmat_part2"
+    amount: 1
+  top_right:
+    material: YELLOW_CARPET
+    name: ""
+    lore: []
+    data:
+      - "epidemic_equipment:hazmat_part2"
+    amount: 1
+  middle_left:
+    material: YELLOW_CARPET
+    name: ""
+    lore: []
+    data:
+      - "epidemic_equipment:hazmat_part2"
+    amount: 1
+  middle_center:
+    material: WHITE_STAINED_GLASS_PANE
+    name: ""
+    lore: []
+    data:
+      - "epidemic_equipment:hazmat_part1"
+    amount: 1
+  middle_right:
+    material: YELLOW_CARPET
+    name: ""
+    lore: []
+    data:
+      - "epidemic_equipment:hazmat_part2"
+    amount: 1
+  bottom_left:
+    material: YELLOW_CARPET
+    name: ""
+    lore: []
+    data:
+      - "epidemic_equipment:hazmat_part2"
+    amount: 1
+  bottom_center:
+    material: YELLOW_CARPET
+    name: ""
+    lore: []
+    data:
+      - "epidemic_equipment:hazmat_part2"
+    amount: 1
+  bottom_right:
+    material: YELLOW_CARPET
+    name: ""
+    lore: []
+    data:
+      - "epidemic_equipment:hazmat_part2"
+    amount: 1

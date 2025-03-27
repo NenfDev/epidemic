@@ -1,0 +1,134 @@
+# ==================================================================================
+#                                    Epidemic
+#                     Bringing real survival to your server
+#                  Visit our Discord - https://discord.gg/7a47xSX
+# ==================================================================================
+
+# ==================================================================================
+# Plugin Settings
+# ==================================================================================
+
+# Afflicted time is the number of seconds that elapse between checking for
+# infectious illnesses (this includes player-player transfer).  Default is 60
+afflicted_time: 60
+# Symptom time is the number of seconds that elapse between applying symtoms
+# when a player has an ailment.  Default is 20
+symptom_time: 20
+# PlaceholderAPI update time is the number of seconds that elapse between checking
+# for updated values.  For example, if set to 10, every 10 seconds, every online
+# player will have their values updated for PlaceholderAPI enabled plugins to pull
+# from. This is outside of the other plugins schedule and is intended to reduce
+# the load on Epidemic pulling ailments/temp/thirst etc. everytime it is requested.
+# Default is 10 (seconds), if you don't use PlaceholderAPI, set to -1 or remove.
+papi_update_time: 10
+
+# For new players joining the server, this is the number of in-game days to make them
+# invincible to all ailments. Set to 0 to disable
+new_player_invincible_days: 7
+
+# ==================================================================================
+# Ailment Settings
+# ==================================================================================
+# Flag to indicate if the illness should be cleared on death
+clear_ailment_on_death: true
+# The radius in which you are contagious
+contagious_radius: 5
+# The height in which you are contagious
+contagious_height: 3
+# Master list of worlds where players cannot gain an ailment
+prevent_afflict_worlds:
+  - world_nether
+# Master list of worlds where players will not experience symptoms
+prevent_symptom_worlds:
+  - world_nether
+
+# List of WorldGuard region names where players cannot gain an ailment
+prevent_ailment_worldguard_regions:
+  - spawn
+
+# List of WorldGuard region names where players will not experience symptoms
+prevent_symptom_worldguard_regions:
+  - spawn
+
+# This is the number ailment checks are run against, 100000 by default, meaning every
+# time an ailment check is done (scheduled or via an event such as a burn or fall),
+# it checks 1-100000.  If your players random number is <= your ailment chance (either
+# infectious or non-infectious) your player will get sick.  To lower your chances of
+# a player receiving an ailment, you can increase random_chance, or lower the chances
+# in the config file.
+random_chance: 100000
+
+# If true, prevent_ailment_worldguard_pvp_deny will prevent players receiving symptoms or new ailments
+# while in a WorldGuard region that does not allow PVP
+prevent_ailment_worldguard_pvp_deny: true
+
+# If true, the equipment such as gas masks will be disabled
+disable_epidemic_equipment: false
+
+# ==================================================================================
+# Crafting
+# ==================================================================================
+# auto_discover_recipes is a true/false flag that if set will add the custom items from
+# Epidemic into the players recipe book.  If not set, the player will need to discover
+# the recipe manually.
+auto_discover_recipes: false
+# ==================================================================================
+# Thirst
+# ==================================================================================
+# Flag to indicate if thirst should be enabled
+enable_thirst: true
+# Number of seconds to check for thirst (time per cycle for symptoms)
+thirst_seconds: 30
+# List of worlds to not apply thirst to
+prevent_thirst_worlds:
+  - world_nether
+# dirty_water_penalty is a flag to indicate if a penalty should be applied for drinking dirty water
+dirty_water_penalty: true
+# dirty_water_chance is the chance that drinking non-boiled water could cause illness
+# This number is added to the environment modifier.  A random chance will be applied against this
+# number and can cause illness.  dirty_water_chance should be 0-1000
+dirty_water_chance: 50
+# respawn thirst level IF the player dies with thirst < 1, OR, if respawn_reset_thirst = true
+respawn_thirst_level: 20
+# respawn_reset_thirst - if true, when a player dies and respawns, thirst will reset to amount in reset_thirst_level
+respawn_reset_thirst: false
+# Flag to disable drinking from a cauldron
+disable_cauldron: false
+# Flag to disable water bowls (drinking from a pool)
+disable_water_bowl: false
+# Flag to disable drinking water with your hands (drinking from a pool)
+disable_water_hands: false
+# If true, the thirst bar is displayed on screen
+use_thirst_bar: true
+# If true, running /thirst will return thirst text instead of usage
+use_thirst_text: false
+# If true, the player will receive warnings about being thirsty
+display_thirst_warning: true
+# If true, when the player drinks they will receive a notification in the action bar
+display_drink_notification: false
+# If true, drinking from a bottle will NOT trigger the dirty water check
+disable_dirty_check_from_bottle: false
+# Amount of damage to inflict on the player if they reach 0 hydration left
+thirst_damage: 1
+
+# ==================================================================================
+# Temperature
+# ==================================================================================
+# Flag to indicate if temperature should be enabled
+enable_temp: true
+# Number of seconds to check for temperature (time per cycle for symptoms)
+temp_seconds: 30
+# List of worlds to not apply temperature to
+prevent_temp_worlds:
+  - world_nether
+  - world_the_end
+# Number of seconds to have temperature relief applied for
+temp_relief_time: 60
+# Flag to indicate if players should be warned about temperature extremes
+temp_warn_players: true
+
+# ==================================================================================
+# Debug
+# ==================================================================================
+debug_logging: false
+debug_to_file: false

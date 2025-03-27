@@ -1,0 +1,236 @@
+########################################################################################
+# Common cold
+# The common cold is fairly easy to catch and is very contagious, however it does not
+# cause much of an issue to the player except to cause them to be overly warm (if
+# temperature is enabled).  This can lead to overheating issues
+########################################################################################
+
+# Ailment file version
+v: 1.1
+
+# Internal key name - cannot be duplicated, no spaces/special characters
+internal_name: "common_cold"
+
+# Display name, how it appears in-game
+display_name: "Common Cold"
+
+# Flag to indicate if the ailment is infectious
+infectious: true
+
+# Chance of getting the ailment via infectious methods
+# Chance is out of 10000.  Each time Epidemic checks for
+# infection, it generates a random number between 1 and 100000
+# in the example below, if that number <= 500, then you would
+# get the ailment.  Infection checks happen once per minute
+# so a 500 chance would be a 500/10000 or 5/100 chance every minute
+infectious_chance: 500
+
+# Chance of getting the ailment via non-infectious methods (ie. falling)
+# This is also calculated from 1-10000 random number.  However, immunity
+# modifiers will not alter this chance.
+non_infectious_chance: 0
+
+# Chance of getting the ailment boost amount from other contagious players
+# Adds this amount to the infectious chance.  So if we had an infectious_chance
+# of 500, with a contagious player nearby with a boost of 74500, it would jump to
+# 75000 every minute. So a random number of 1-100000 would now be <= 75000 would
+# get you sick instead of the 100, so a 3/4 chance instead of a 1/1000
+contagious_chance_boost: 74500
+
+# Chance of contracting the infectious ailment when deliberately injected
+# Chance is out of the random_chance in config.yml - To always have the player
+# get the ailment when injected, set to same as random_chance, lower numbers
+# have less chance
+deliberate_transmission_chance: 100000
+
+# Maximum Immunity amount - This removes your chance of getting sick.
+# So if you had an infectious chance of 100 and a max_immunity of 90,
+# it would be 100-90 = 10.  So your 1-10000 random number with <= 100
+# leading to sickness would now be 1-10000 with <= 10 to get sick
+# (assuming you have max'd out your immunity)
+max_immunity: 0
+
+# Immunity modifier - This is the amount that your immunity increases by each
+# time you get better from an illness.  It will add on until it reaches the
+# maximum in max_immunity.
+# This is also the amount that your immunity will lower if you die.  So if
+# you had built up to an immunity level of 40, then fell from someplace high
+# your immunity would drop by this modifier (in example, 10 - so to 30)
+immunity_modifier: 0
+
+# Flag to indicate if the ailment should be reported in /health if symptoms aren't
+# being applied yet
+report_before_symptoms: false
+
+# Flag to indicate if the player should be warned when they get the ailment
+warn_on_afflicted: false
+
+# Message to display to the player when they get the ailment
+afflicted_text: ""
+
+# Message to display to the player when symptoms kick in
+symptom_text: "You feel weak, cold and your lymph nodes are swollen"
+
+# Message to display to a player when they successfully cause an infection
+# Can use <%player%> for player name
+infected_other_text: ""
+
+# Message to display to the player when they are healed by some non-natural manner
+healed_text: "The swelling has gone down and you're starting to feel more like yourself"
+
+# Message to display to the player when they are healed naturally (over time)
+natural_cure_text: "You're starting to feel better"
+
+# Number of days until the ailment naturally heals - set to 0 if it does not naturally heal
+natural_cure_days: 2
+
+# Number of seconds between getting the ailment and showing symptoms
+# During this time, they are still contagious, but do not show being so
+time_to_symptoms: 120
+
+# Flag to indicate if the illness can be fatal (if false, the player will never drop
+# below half-heart from the symptoms
+is_fatal: false
+
+# Damage to apply every time the symptoms run
+damage: 0
+
+# Chance of the ailment being cured while you sleep.  This number is out of 1000
+# Lower numbers have less chance of curing the player.  Set to 0 to never cure the
+# player, or 1000 to always cure them when sleeping
+cure_with_sleep_chance: 200
+
+# Message to send to the player when they are cured by sleeping
+cure_with_sleep_message: "The sleep did you good, and you're no longer sniffling"
+
+# Secondary ailments can be triggered after a set amount of time.  If there is
+# no secondary ailment, comment this section out.
+# secondary_ailment.ailment is the internal name of the ailment to apply
+# secondary_ailment.time is the number of seconds until it is applied
+#secondary_ailment:
+#  ailment:
+#  time:
+
+# If temperature is enabled, fever will cause the player to overheat quicker
+# Alternately, if they are cold, this will keep them warmer
+fever: true
+
+# If temperature is enabled, chills will cause the player to get cold quicker
+# Alternately, if they are hot, this will cool them down
+chills: false
+
+# Flag to indicate if the player should vomit as a symptom
+display_vomit: false
+
+# Flags to indicate if the player should bleed as a symptom
+# Bleeding can happen at face, head, chest, back, arms and legs
+# and must be set individually.  Player can bleed from multiple
+# places
+display_bleeding:
+  face: false
+  head: false
+  chest: false
+  back: false
+  left_arm: false
+  right_arm: false
+  left_leg: false
+  right_leg: false
+
+# Flag to indicate if the player should lose bowel control as a symptom
+display_bowel: false
+
+# Flag to indicate if the player should lose bladder control as a symptom
+display_urinate: false
+
+# Flag to indicate if the player should sweat as a symptom
+display_sweat: false
+
+# Flag to indicate if particle effects should be displayed when a player is contagious
+display_contagious: false
+
+# Flag to indicate if particle effects should be displayed when a player has an injury
+display_injury: false
+
+# Flag to indicate if the player should have insomnia as a symptom - if true, the
+# player will be unable to sleep
+insomnia: false
+
+# Flag to indicate if the player should hallucinate sounds as a symptom
+hallucination: false
+
+# Flag to indicate if the players chat should turn into gibberish as a symptom
+gibberish: true
+
+# Flag to indicate if the players food should rot away as a symptom
+# Bowls/bottles will be replaced with empties
+food_rot: false
+
+# Amount of XP to remove from the player every time symptoms are applied
+remove_xp: 0
+
+# Flag to indicate if iron armor/tools/swords should rust and lose
+# durability as a symptom
+rust: false
+
+# Amount of damage to apply to each iron item if rusting
+rust_amount: 0
+
+# Flag to indicate if the player should be clumsy and cause them to drop
+# the item from the main hand (1 in 5 chance each time symptoms are applied)
+clumsy: false
+
+# Chance out of 1000 that the player will die suddenly from this ailment
+# Set to 0 for no chance, lower number is less chance
+sudden_death_chance: 0
+
+# Message to display to the player when they suddenly die of this ailment
+sudden_death_message: ""
+
+# Flag to indicate that the ailment is caused by a fall
+caused_by_fall: false
+
+# Flag to indicate if the ailment is caused by an injury
+caused_by_injury: false
+
+# Flag to indicate if the ailment is caused by a weapon (sword, axe, projectile, stick)
+caused_by_weapon_injury: false
+
+# Flag to indicate if the ailment is caused by an explosion
+caused_by_explosion: false
+
+# Flag to indicate if the ailment is caused by burning
+caused_by_fire: false
+
+# Flag to indicate if the ailment is caused by water
+caused_by_water: false
+
+# Flag to indicate if the ailment is caused by eating/drinking
+caused_by_consume: false
+
+# Flag to indicate if the ailment is caused by magic damage
+caused_by_magic: false
+
+# List of entities that can cause this
+caused_by_entity: []
+
+# Potion effects to apply for symptoms.  Should include the
+# potion effect type, time and amplifier
+ailment_effects: []
+
+# Particle effect to show when healed
+particle_on_heal: VILLAGER_HAPPY
+
+# Sound to play when healed
+sound_on_heal: BREWING_STAND_BREW
+
+# Flag to indicate if a vial of contaminated blood can be drawn
+can_syringe: false
+
+# Flag to indicate if a vaccination can be applied
+can_vaccinate: false
+
+# Flag to indicate if recovering from the ailment gives some immunity
+can_gain_immunity: false
+
+# Flag to indicate if this ailment should be used
+is_active: true

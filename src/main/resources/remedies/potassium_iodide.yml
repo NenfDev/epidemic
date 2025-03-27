@@ -1,0 +1,43 @@
+v: 1.0
+key: "potassium_iodide"
+display_name: "&bPotassium Iodide"
+lore:
+  - "&fA pill that helps your radiation sickness"
+used_text: "You take the pills and hope for the best"
+base_item: PUMPKIN_SEEDS
+return_item: AIR
+enchanted_glow: false
+recipe:
+  craft:
+    top:
+      left: POTATO
+      center: POTATO
+      right: POTATO
+    middle:
+      left: COD
+      center: BEETROOT
+      right: COD
+    bottom:
+      left: KELP
+      center: EGG
+      right: KELP
+  amount: 1
+  require_craft_perm: false
+food: false
+drink: false
+item_consumed: true
+cures:
+  - radiation
+remove_effects:
+  CONFUSION:
+    time: 10
+    amplifier: 1
+  WEAKNESS:
+    time: 10
+    amplifier: 1
+health: 2
+hunger: 1
+thirst: 0
+symptom_relief_seconds: 0
+cold_relief_seconds: 0
+heat_relief_seconds: 0

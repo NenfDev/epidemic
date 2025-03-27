@@ -1,0 +1,131 @@
+########################################################################################
+# Typhus
+# The typhus cure is used to cure the typhus ailment.  It is a food type Remedy that
+# is consumed upon use.  It returns an empty bowl to the player after consumption.
+# It reduces upto 10 seconds of confusion (and lowers amplifier by upto 2) and upto
+# 20 seconds of weakness (and lowers amplifier by upto 1).  It also restores 2 hunger
+# points
+########################################################################################
+
+# Remedy file version
+v: 1.0
+
+# Unique key for the custom cure
+key: "typhus_cure"
+
+# Display name of the custom cure
+display_name: "&bTyphus Cure"
+
+# Item lore, shown when hovering over the item
+lore:
+  - "&fA thick red goop that tastes like dirt"
+
+# Text displayed to the player when using the item
+used_text: "You manage to swallow the red goop down"
+
+# Base item is the item it is displayed as in-game
+base_item: BEETROOT_SOUP
+
+# Return item is the item that should be returned to the player
+# ONLY to be used for non-edible items (potions/food do not need a return item
+# and they will not be used
+return_item: BOWL
+
+# Color is the potion color (only if base_item is POTION) in name, OR red/green/blue
+# If both exist, name will always take priority
+#potion_color:
+#  red: 84
+#  green: 213
+#  blue: 97
+
+# If set, will apply an enchantment glow to the item
+enchanted_glow: false
+
+# Item recipe
+# You can have either craft OR furnace, not both  If both are included, only the craft recipe will be read
+recipe:
+  # CraftRecipe
+  craft:
+    top:
+      left: AIR
+      center: DIRT
+      right: AIR
+    middle:
+      left: FERMENTED_SPIDER_EYE
+      center: SPIDER_EYE
+      right: FERMENTED_SPIDER_EYE
+    bottom:
+      left: AIR
+      center: BOWL
+      right: AIR
+
+  # recipe.amount is the number of items given when crafting
+  amount: 1
+  # true/false flag to indicate if the player requires epidemic.craft.<key> to craft
+  require_craft_perm: false
+
+# If set, item is food (MUST BE edible).  Remedy will trigger after consuming it
+food: true
+
+# If set, item is a drink (must be drinkable).  Remedy will trigger after consuming it
+drink: false
+
+# item_consumed is for NON-FOOD/DRINK ONLY - (items, not edible)
+# If item_consumed is true, then the item is removed/replaced from the player
+# after use.  if return_item is AIR, removed, if not AIR, then replaced
+# If item_consumed is false, then the item is not taken from the player after
+# use, for example, a knee brace that isn't ruined on use
+# Can only be used if not food or drink
+item_consumed: true
+
+# item_uses is for NON-FOOD/DRINK ONLY - (items, not edible)
+# item_uses is ONLY considered if item_consumed = false
+# item_uses is the number of times an item can be used before breaking
+# if the item is not consumable.  For example, if you use a cane to
+# heal a broken leg 10 times, and item_uses = 10, then after the 10th
+# time, it will break.  Set to 0 for infinite uses.
+# Comment out if not an item, or if item is consumed
+# item_uses: 10
+
+# List of ailments that the remedy cures
+cures:
+  - typhus
+
+# Effects to add - matches on potion effect type, then adds the time to the number
+# of seconds left on the timer (IF the potion effect is already active, if not, will
+# set it as a new effect for the number of seconds).  Will set the amplifier to the
+# amplifier number here IF the current amplifier is < than this (or not set)
+#add_effects:
+#  WEAKNESS:
+#    time: 10
+#    amplifier: 1
+
+
+# Effects to remove - matches on potion effect type, then removes the time from the number
+# of seconds left on the timer, and removes amplifier from current amplifier.  If number of
+# seconds is <= 0 or if amplified <= 0, then the potion effect is completely removed
+remove_effects:
+  CONFUSION:
+    time: 10
+    amplifier: 2
+  WEAKNESS:
+    time: 20
+    amplifier: 1
+
+# Health is the number of health points restored (if negative, points removed)
+health: 0
+
+# Hunger is the number of hunger points restored (if negative, points removed)
+hunger: 2
+
+# Thirst is the number of thirst points restored (if negative, points removed)
+thirst: 0
+
+# Number of seconds to apply symptom relief for
+symptom_relief_seconds: 0
+
+# Number of seconds to apply cold relief for
+cold_relief_seconds: 0
+
+# Number of seconds to apply heat relief for
+heat_relief_seconds: 0

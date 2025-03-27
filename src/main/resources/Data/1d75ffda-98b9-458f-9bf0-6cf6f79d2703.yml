@@ -1,0 +1,17 @@
+thirst: 98.0
+ailments:
+  rabies:
+    afflicted_day: 143
+    afflicted_time: 15234
+    secondary_applied: false
+vaccines:
+  plague:
+    last_dose_day: 141
+immunity:
+  plague:
+    amount: 3000
+  rabies:
+    amount: 100
+invincible:
+  start: 20
+  end: 30

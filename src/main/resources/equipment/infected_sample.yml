@@ -1,0 +1,12 @@
+# Infected Sample
+
+name: "&4Infected Sample"
+lore:
+  - "&fAn infected tissue sample"
+item:
+  - "i:"
+  - "  ==: org.bukkit.inventory.ItemStack"
+  - "  v: 1519"
+  - "  type: ROTTEN_FLESH"
+
+# Cannot be crafted - created in Incubation Chamber
