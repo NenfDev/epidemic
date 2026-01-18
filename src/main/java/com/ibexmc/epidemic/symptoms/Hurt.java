@@ -21,7 +21,7 @@ public class Hurt {
                     "Player: " + player.getDisplayName() + ", " +
                             "Affliction: " + afflicted
             );
-            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 double damageAmount = afflicted.getAilment().getDamage();
                 hurt(player, damageAmount, afflicted.getAilment().isFatal());
             } else {
@@ -48,7 +48,7 @@ public class Hurt {
                         "Amount: " + amount + ", Fatal?: " + fatal
         );
         try {
-            if (amount < 1 || amount > 20) {
+            if (amount <= 0 || amount > 20) {
                 // Exit out if the damage amount is out of range
                 Logging.debug(
                         "Hurt",
@@ -59,11 +59,7 @@ public class Hurt {
             }
             if (!fatal) {
                 if (player.getHealth() <= amount) {
-                    Logging.debug(
-                            "Hurt",
-                            "hurt(Player, double, boolean)",
-                            "Not applying damage to player as damage cannot be fatal"
-                    );
+                    player.setHealth(Math.max(0.5, player.getHealth() - 0.5)); // Reduce slowly but don't kill
                     return;
                 }
             }

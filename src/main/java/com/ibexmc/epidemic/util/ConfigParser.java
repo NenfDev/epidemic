@@ -442,6 +442,37 @@ public class ConfigParser {
         }
     }
 
+    public EpidemicCraftRecipe.Ingredient getIngredientForCraftRecipe(String configItem, String row, String column) {
+        String path = configItem + ".craft." + row + "." + column;
+        if (this.config.contains(path)) {
+            String value = this.config.getString(path);
+            if (value != null && value.startsWith("ITEMSADDER:")) {
+                return new EpidemicCraftRecipe.Ingredient(value.substring(11));
+            } else if (value != null && value.startsWith("CUSTOMMODELDATA:")) {
+                String[] parts = value.split(":");
+                if (parts.length == 3) {
+                    Material material = StringFunctions.stringToMaterial(parts[1]);
+                    int cmd = 0;
+                    try {
+                        cmd = Integer.parseInt(parts[2]);
+                    } catch (NumberFormatException ignored) {}
+                    if (material == null) material = Material.BARRIER;
+                    return new EpidemicCraftRecipe.Ingredient(material, cmd);
+                } else {
+                    return new EpidemicCraftRecipe.Ingredient(Material.BARRIER);
+                }
+            } else {
+                Material material = StringFunctions.stringToMaterial(value);
+                if (material == null) {
+                    material = Material.BARRIER;
+                }
+                return new EpidemicCraftRecipe.Ingredient(material);
+            }
+        } else {
+            return new EpidemicCraftRecipe.Ingredient(Material.AIR);
+        }
+    }
+
     /**
      * Gets a Recipe from a config item.  Will lookup either craft or furnace recipes
      * @param configItem Configuration item to check
@@ -452,19 +483,19 @@ public class ConfigParser {
             if (this.config.contains(configItem)) {
                 if (this.config.contains(configItem + ".craft")) {
                     EpidemicCraftRecipe.Row top = new EpidemicCraftRecipe.Row(
-                            this.getMaterialForCraftRecipe(configItem, "top", "left"),
-                            this.getMaterialForCraftRecipe(configItem, "top", "center"),
-                            this.getMaterialForCraftRecipe(configItem, "top", "right")
+                            this.getIngredientForCraftRecipe(configItem, "top", "left"),
+                            this.getIngredientForCraftRecipe(configItem, "top", "center"),
+                            this.getIngredientForCraftRecipe(configItem, "top", "right")
                     );
                     EpidemicCraftRecipe.Row middle = new EpidemicCraftRecipe.Row(
-                            this.getMaterialForCraftRecipe(configItem, "middle", "left"),
-                            this.getMaterialForCraftRecipe(configItem, "middle", "center"),
-                            this.getMaterialForCraftRecipe(configItem, "middle", "right")
+                            this.getIngredientForCraftRecipe(configItem, "middle", "left"),
+                            this.getIngredientForCraftRecipe(configItem, "middle", "center"),
+                            this.getIngredientForCraftRecipe(configItem, "middle", "right")
                     );
                     EpidemicCraftRecipe.Row bottom = new EpidemicCraftRecipe.Row(
-                            this.getMaterialForCraftRecipe(configItem, "bottom", "left"),
-                            this.getMaterialForCraftRecipe(configItem, "bottom", "center"),
-                            this.getMaterialForCraftRecipe(configItem, "bottom", "right")
+                            this.getIngredientForCraftRecipe(configItem, "bottom", "left"),
+                            this.getIngredientForCraftRecipe(configItem, "bottom", "center"),
+                            this.getIngredientForCraftRecipe(configItem, "bottom", "right")
                     );
                     EpidemicRecipe recipe = new EpidemicCraftRecipe(top, middle, bottom);
                     return new ConfigReturn(true, recipe);

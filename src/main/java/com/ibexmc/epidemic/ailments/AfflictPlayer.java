@@ -10,7 +10,6 @@ import com.ibexmc.epidemic.util.functions.ParticleFunctions;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import com.ibexmc.epidemic.util.functions.TimeFunctions;
-import com.ibexmc.domain.Domain;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -67,9 +66,9 @@ public class AfflictPlayer {
         }
 
         if (Epidemic.instance().dependencies().hasDomain()) {
-            com.ibexmc.domain.api.API domain = Epidemic.instance().dependencies().getDomain();
-            if (domain.flagAtLocation(
-                    domain.flagFromName("EPIDEMIC_PREVENT_AFFLICT"),
+            Object domainFlag = Epidemic.instance().dependencies().flagFromName("EPIDEMIC_PREVENT_AFFLICT");
+            if (Epidemic.instance().dependencies().flagAtLocation(
+                    domainFlag,
                     player.getLocation()
             )
             ) {
@@ -80,7 +79,6 @@ public class AfflictPlayer {
                 );
                 return false;
             }
-
         }
 
 
@@ -202,7 +200,7 @@ public class AfflictPlayer {
                             "Applying affliction for " + ailment.getDisplayName() + " to " + player.getDisplayName()
                     );
                 }
-                Afflicted newAfflicted = new Afflicted(uuid, ailment, Epidemic.instance().gameData().day().get(), Epidemic.instance().gameData().day().getWorld().getTime(), new Timestamp(System.currentTimeMillis()), false, null);
+                Afflicted newAfflicted = new Afflicted(uuid, ailment, Epidemic.instance().gameData().day().get(), Epidemic.instance().gameData().day().getWorld().getTime(), new Timestamp(System.currentTimeMillis()));
                 Epidemic.instance().data().addPlayerAffliction(uuid, newAfflicted);
                 if (infectPlayer != null) {
                     HashMap<String, String> pholder = new HashMap<>();
@@ -220,34 +218,11 @@ public class AfflictPlayer {
                                 "AilmentEffects Count: " + ailment.getAilmentEffects().size()
                 );
 
-                if (ailment.isInfectious()) {
-                    if (ailment.isDisplayContagious()) {
-                        ParticleFunctions.contagious(player);
-                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5f, 1f);
-                    }
-                } else {
-                    if (ailment.isDisplayInjury()) {
-                        ParticleFunctions.injury(player);
-                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5f, 1f);
-                    }
-                }
                 if (ailment.isWarnOnAfflicted()) {
                     SendMessage.Player("na", ailment.getAfflictedText(), player, true, null);
                 }
                 if (ailment.getTimeToSymptoms() < 1) {
-                    PotionEffects.applyPotionEffects(player, newAfflicted);
-                    Hurt.damagePlayer(player, newAfflicted);
-                    ParticleEffects.applyVomit(player, newAfflicted);
-                    ParticleEffects.applyBleeding(player, newAfflicted);
-                    ParticleEffects.applyBowel(player, newAfflicted);
-                    ParticleEffects.applyUrinate(player, newAfflicted);
-                    ParticleEffects.applyVomit(player, newAfflicted);
-                    ParticleEffects.applySweat(player, newAfflicted);
-                    Insomnia.applyInsomnia(player, newAfflicted);
-                    Hallucination.applyHallucination(player, newAfflicted);
-                    RemoveXP.applyRemoveXP(player, newAfflicted);
-                    Food.applyRotFood(player, newAfflicted);
-                    Rust.applyRust(player, newAfflicted);
+                    ailment.applySymptoms(player, newAfflicted);
                 }
             } else {
         }

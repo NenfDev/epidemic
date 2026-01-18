@@ -104,12 +104,12 @@ public class PotionEffects {
         Set<PotionEffectType> effects = new HashSet<>();
         effects.add(PotionEffectType.BAD_OMEN);
         effects.add(PotionEffectType.BLINDNESS);
-        effects.add(PotionEffectType.CONFUSION);
-        effects.add(PotionEffectType.HARM);
+        effects.add(PotionEffectType.NAUSEA);
+        effects.add(PotionEffectType.INSTANT_DAMAGE);
         effects.add(PotionEffectType.HUNGER);
         effects.add(PotionEffectType.POISON);
-        effects.add(PotionEffectType.SLOW);
-        effects.add(PotionEffectType.SLOW_DIGGING);
+        effects.add(PotionEffectType.SLOWNESS);
+        effects.add(PotionEffectType.MINING_FATIGUE);
         effects.add(PotionEffectType.UNLUCK);
         effects.add(PotionEffectType.WEAKNESS);
         effects.add(PotionEffectType.WITHER);

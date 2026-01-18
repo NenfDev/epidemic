@@ -11,6 +11,7 @@ public class Afflicted {
     private long afflictTime;
     private Timestamp startTimestamp;
     private boolean secondaryApplied;
+    private boolean symptomsStarted;
 
     public Afflicted(UUID uuid, Ailment ailment, int day, long time, Timestamp startTimestamp) {
         this.uuid = uuid;
@@ -18,31 +19,18 @@ public class Afflicted {
         this.afflictDay = day;
         this.afflictTime = time;
         this.startTimestamp = startTimestamp;
+        this.secondaryApplied = false;
+        this.symptomsStarted = false;
     }
 
-    public Afflicted(UUID uuid, Ailment ailment, int day, long time, Timestamp startTimestamp, boolean hasRelief, Timestamp reliefUntil) {
-        this.uuid = uuid;
-        this.ailment = ailment;
-        this.afflictDay = day;
-        this.afflictTime = time;
-        this.startTimestamp = startTimestamp;
-    }
-
-    public Afflicted(UUID uuid, Ailment ailment, int day, long time, Timestamp startTimestamp, boolean hasRelief, Timestamp reliefUntil, boolean infected, boolean wasinfected) {
-        this.uuid = uuid;
-        this.ailment = ailment;
-        this.afflictDay = day;
-        this.afflictTime = time;
-        this.startTimestamp = startTimestamp;
-    }
-
-    public Afflicted(UUID uuid, Ailment ailment, int day, long time, Timestamp startTimestamp, boolean secondaryApplied) {
+    public Afflicted(UUID uuid, Ailment ailment, int day, long time, Timestamp startTimestamp, boolean secondaryApplied, boolean symptomsStarted) {
         this.uuid = uuid;
         this.ailment = ailment;
         this.afflictDay = day;
         this.afflictTime = time;
         this.startTimestamp = startTimestamp;
         this.secondaryApplied = secondaryApplied;
+        this.symptomsStarted = symptomsStarted;
     }
 
 
@@ -132,6 +120,22 @@ public class Afflicted {
      */
     public void setSecondaryApplied(boolean secondaryApplied) {
         this.secondaryApplied = secondaryApplied;
+    }
+
+    /**
+     * Checks if symptoms have started for this affliction
+     * @return true if symptoms have started
+     */
+    public boolean isSymptomsStarted() {
+        return symptomsStarted;
+    }
+
+    /**
+     * Sets the flag for if symptoms have started
+     * @param symptomsStarted true if symptoms have started
+     */
+    public void setSymptomsStarted(boolean symptomsStarted) {
+        this.symptomsStarted = symptomsStarted;
     }
 
 }

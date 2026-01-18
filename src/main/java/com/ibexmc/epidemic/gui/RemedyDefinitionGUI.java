@@ -3,26 +3,28 @@ package com.ibexmc.epidemic.gui;
 import com.ibexmc.epidemic.Epidemic;
 import com.ibexmc.epidemic.helpers.recipe.EpidemicCraftRecipe;
 import com.ibexmc.epidemic.helpers.recipe.EpidemicFurnaceRecipe;
+import com.ibexmc.epidemic.remedy.Remedy;
 import com.ibexmc.epidemic.util.Locale;
 import com.ibexmc.epidemic.util.Permission;
 import com.ibexmc.epidemic.util.SendMessage;
-import net.md_5.bungee.api.ChatColor;
+import com.ibexmc.epidemic.util.functions.InventoryFunctions;
+import com.ibexmc.epidemic.util.functions.StringFunctions;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
-import com.ibexmc.epidemic.remedy.Remedy;
-import com.ibexmc.epidemic.util.functions.InventoryFunctions;
-import com.ibexmc.epidemic.util.functions.StringFunctions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +96,30 @@ public class RemedyDefinitionGUI implements InvGUI {
     }
     //endregion
     //region Methods
+    private ItemStack getIngredientItemStack(EpidemicCraftRecipe.Ingredient ingredient) {
+        if (ingredient == null || ingredient.isAir()) {
+            return new ItemStack(Material.AIR);
+        }
+        if (ingredient.isItemsAdder()) {
+            ItemStack iaItem = com.ibexmc.epidemic.util.functions.ItemFunctions.getItemsAdderItem(ingredient.getItemsAdderID());
+            if (iaItem != null) {
+                return iaItem;
+            }
+            return new ItemStack(Material.BARRIER);
+        }
+        ItemStack item = new ItemStack(ingredient.getMaterial());
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null && ingredient.hasCustomModelData()) {
+            meta.setCustomModelData(ingredient.getCustomModelData());
+        }
+        if (meta instanceof PotionMeta) {
+            PotionMeta potionMeta = (PotionMeta) meta;
+            potionMeta.setBasePotionType(PotionType.WATER);
+        }
+        item.setItemMeta(meta);
+        return item;
+    }
+
     @Override
     /**
      * Gets the inventory being used in this GUI
@@ -105,15 +131,18 @@ public class RemedyDefinitionGUI implements InvGUI {
         );
 
         // Black/Red Glass
-        ItemStack itemStackNA = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
+        ItemStack itemStackNA = new ItemStack(Epidemic.instance().config().getGuiRemedyRecipeBorderItem(), 1);
         ItemMeta itemMetaNA = itemStackNA.getItemMeta();
         if (itemMetaNA != null) {
             itemMetaNA.setDisplayName(" ");
+            if (Epidemic.instance().config().getGuiRemedyRecipeBorderCMD() > 0) {
+                itemMetaNA.setCustomModelData(Epidemic.instance().config().getGuiRemedyRecipeBorderCMD());
+            }
             itemMetaNA.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             itemStackNA.setItemMeta(itemMetaNA);
         }
-        ItemStack itemStackBack = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
-        ItemMeta itemMetaBack = itemStackNA.getItemMeta();
+        ItemStack itemStackBack = new ItemStack(Epidemic.instance().config().getGuiRemedyRecipeBackItem(), 1);
+        ItemMeta itemMetaBack = itemStackBack.getItemMeta();
         if (itemMetaBack != null) {
             itemMetaBack.setDisplayName(Locale.localeText(
                     "remedy_def_gui_back",
@@ -128,6 +157,9 @@ public class RemedyDefinitionGUI implements InvGUI {
                 backLore = new ArrayList<>();
             }
             itemMetaBack.setLore(backLore);
+            if (Epidemic.instance().config().getGuiRemedyRecipeBackCMD() > 0) {
+                itemMetaBack.setCustomModelData(Epidemic.instance().config().getGuiRemedyRecipeBackCMD());
+            }
             itemMetaBack.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             itemStackBack.setItemMeta(itemMetaBack);
         }
@@ -181,131 +213,23 @@ public class RemedyDefinitionGUI implements InvGUI {
                 inventory.setItem(0, craftRecipe);
 
                 // Top - Left
-                ItemStack itemStackTop1 = new ItemStack(epidemicCraftRecipe.getTop().getLeft(), 1);
-                ItemMeta itemMetaTop1 = itemStackTop1.getItemMeta();
-                if (itemMetaTop1 != null) {
-                    itemMetaTop1.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    itemStackTop1.setItemMeta(itemMetaTop1);
-                }
-                if (itemMetaTop1 instanceof PotionMeta) {
-                    PotionMeta potionMetaTop1 = (PotionMeta) itemMetaTop1;
-                    PotionData potionDataTop1 = new PotionData(PotionType.WATER);
-                    potionMetaTop1.setBasePotionData(potionDataTop1);
-                    itemStackTop1.setItemMeta(potionMetaTop1);
-                }
-                inventory.setItem(2, itemStackTop1);
+                inventory.setItem(2, getIngredientItemStack(epidemicCraftRecipe.getTop().getLeft()));
                 // Top - Center
-                ItemStack itemStackTop2 = new ItemStack(epidemicCraftRecipe.getTop().getCenter(), 1);
-                ItemMeta itemMetaTop2 = itemStackTop2.getItemMeta();
-                if (itemMetaTop2 != null) {
-                    itemMetaTop2.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    itemStackTop2.setItemMeta(itemMetaTop2);
-                }
-                if (itemMetaTop2 instanceof PotionMeta) {
-                    PotionMeta potionMetaTop2 = (PotionMeta) itemMetaTop2;
-                    PotionData potionDataTop2 = new PotionData(PotionType.WATER);
-                    potionMetaTop2.setBasePotionData(potionDataTop2);
-                    itemStackTop2.setItemMeta(potionMetaTop2);
-                }
-                inventory.setItem(3, itemStackTop2);
+                inventory.setItem(3, getIngredientItemStack(epidemicCraftRecipe.getTop().getCenter()));
                 // Top - Right
-                ItemStack itemStackTop3 = new ItemStack(epidemicCraftRecipe.getTop().getRight(), 1);
-                ItemMeta itemMetaTop3 = itemStackTop3.getItemMeta();
-                if (itemMetaTop3 != null) {
-                    itemMetaTop3.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    itemStackTop3.setItemMeta(itemMetaTop3);
-                }
-                if (itemMetaTop3 instanceof PotionMeta) {
-                    PotionMeta potionMetaTop3 = (PotionMeta) itemMetaTop3;
-                    PotionData potionDataTop3 = new PotionData(PotionType.WATER);
-                    potionMetaTop3.setBasePotionData(potionDataTop3);
-                    itemStackTop3.setItemMeta(potionMetaTop3);
-                }
-                inventory.setItem(4, itemStackTop3);
+                inventory.setItem(4, getIngredientItemStack(epidemicCraftRecipe.getTop().getRight()));
                 // Middle - Left
-                ItemStack itemStackMid1 = new ItemStack(epidemicCraftRecipe.getMiddle().getLeft(), 1);
-                ItemMeta itemMetaMid1 = itemStackMid1.getItemMeta();
-                if (itemMetaMid1 != null) {
-                    itemMetaMid1.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    itemStackMid1.setItemMeta(itemMetaMid1);
-                }
-                if (itemMetaMid1 instanceof PotionMeta) {
-                    PotionMeta potionMetaMid1 = (PotionMeta) itemMetaMid1;
-                    PotionData potionDataMid1 = new PotionData(PotionType.WATER);
-                    potionMetaMid1.setBasePotionData(potionDataMid1);
-                    itemStackMid1.setItemMeta(potionMetaMid1);
-                }
-                inventory.setItem(11, itemStackMid1);
+                inventory.setItem(11, getIngredientItemStack(epidemicCraftRecipe.getMiddle().getLeft()));
                 // Middle - Center
-                ItemStack itemStackMid2 = new ItemStack(epidemicCraftRecipe.getMiddle().getCenter(), 1);
-                ItemMeta itemMetaMid2 = itemStackMid2.getItemMeta();
-                if (itemMetaMid2 != null) {
-                    itemMetaMid2.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    itemStackMid2.setItemMeta(itemMetaMid2);
-                }
-                if (itemMetaMid2 instanceof PotionMeta) {
-                    PotionMeta potionMetaMid2 = (PotionMeta) itemMetaMid2;
-                    PotionData potionDataMid2 = new PotionData(PotionType.WATER);
-                    potionMetaMid2.setBasePotionData(potionDataMid2);
-                    itemStackMid2.setItemMeta(potionMetaMid2);
-                }
-                inventory.setItem(12, itemStackMid2);
+                inventory.setItem(12, getIngredientItemStack(epidemicCraftRecipe.getMiddle().getCenter()));
                 // Middle - Right
-                ItemStack itemStackMid3 = new ItemStack(epidemicCraftRecipe.getMiddle().getRight(), 1);
-                ItemMeta itemMetaMid3 = itemStackMid3.getItemMeta();
-                if (itemMetaMid3 != null) {
-                    itemMetaMid3.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    itemStackMid3.setItemMeta(itemMetaMid3);
-                }
-                if (itemMetaMid3 instanceof PotionMeta) {
-                    PotionMeta potionMetaMid3 = (PotionMeta) itemMetaMid3;
-                    PotionData potionDataMid3 = new PotionData(PotionType.WATER);
-                    potionMetaMid3.setBasePotionData(potionDataMid3);
-                    itemStackMid3.setItemMeta(potionMetaMid3);
-                }
-                inventory.setItem(13, itemStackMid3);
+                inventory.setItem(13, getIngredientItemStack(epidemicCraftRecipe.getMiddle().getRight()));
                 // Bottom - Left
-                ItemStack itemStackBottom1 = new ItemStack(epidemicCraftRecipe.getBottom().getLeft(), 1);
-                ItemMeta itemMetaBottom1 = itemStackBottom1.getItemMeta();
-                if (itemMetaBottom1 != null) {
-                    itemMetaBottom1.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    itemStackBottom1.setItemMeta(itemMetaBottom1);
-                }
-                if (itemMetaBottom1 instanceof PotionMeta) {
-                    PotionMeta potionMetaBottom1 = (PotionMeta) itemMetaBottom1;
-                    PotionData potionDataBottom1 = new PotionData(PotionType.WATER);
-                    potionMetaBottom1.setBasePotionData(potionDataBottom1);
-                    itemStackBottom1.setItemMeta(potionMetaBottom1);
-                }
-                inventory.setItem(20, itemStackBottom1);
+                inventory.setItem(20, getIngredientItemStack(epidemicCraftRecipe.getBottom().getLeft()));
                 // Bottom - Center
-                ItemStack itemStackBottom2 = new ItemStack(epidemicCraftRecipe.getBottom().getCenter(), 1);
-                ItemMeta itemMetaBottom2 = itemStackBottom2.getItemMeta();
-                if (itemMetaBottom2 != null) {
-                    itemMetaBottom2.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    itemStackBottom2.setItemMeta(itemMetaBottom2);
-                }
-                if (itemMetaBottom2 instanceof PotionMeta) {
-                    PotionMeta potionMetaBottom2 = (PotionMeta) itemMetaBottom2;
-                    PotionData potionDataBottom2 = new PotionData(PotionType.WATER);
-                    potionMetaBottom2.setBasePotionData(potionDataBottom2);
-                    itemStackBottom2.setItemMeta(potionMetaBottom2);
-                }
-                inventory.setItem(21, itemStackBottom2);
+                inventory.setItem(21, getIngredientItemStack(epidemicCraftRecipe.getBottom().getCenter()));
                 // Bottom - Right
-                ItemStack itemStackBottom3 = new ItemStack(epidemicCraftRecipe.getBottom().getRight(), 1);
-                ItemMeta itemMetaBottom3 = itemStackBottom3.getItemMeta();
-                if (itemMetaBottom3 != null) {
-                    itemMetaBottom3.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    itemStackBottom3.setItemMeta(itemMetaBottom3);
-                }
-                if (itemMetaBottom3 instanceof PotionMeta) {
-                    PotionMeta potionMetaBottom3 = (PotionMeta) itemMetaBottom3;
-                    PotionData potionDataBottom3 = new PotionData(PotionType.WATER);
-                    potionMetaBottom3.setBasePotionData(potionDataBottom3);
-                    itemStackBottom3.setItemMeta(potionMetaBottom3);
-                }
-                inventory.setItem(22, itemStackBottom3);
+                inventory.setItem(22, getIngredientItemStack(epidemicCraftRecipe.getBottom().getRight()));
             } else if (remedy.getRecipe() instanceof EpidemicFurnaceRecipe) {
 
                 EpidemicFurnaceRecipe epidemicFurnaceRecipe = (EpidemicFurnaceRecipe) remedy.getRecipe();
@@ -342,8 +266,7 @@ public class RemedyDefinitionGUI implements InvGUI {
                 }
                 if (itemMetaSource instanceof PotionMeta) {
                     PotionMeta potionMetaMid2 = (PotionMeta) itemMetaSource;
-                    PotionData potionDataMid2 = new PotionData(PotionType.WATER);
-                    potionMetaMid2.setBasePotionData(potionDataMid2);
+                    potionMetaMid2.setBasePotionType(PotionType.WATER);
                     itemStackSource.setItemMeta(potionMetaMid2);
                 }
                 inventory.setItem(13, itemStackSource);

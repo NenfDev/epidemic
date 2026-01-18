@@ -12,7 +12,7 @@ import com.ibexmc.epidemic.util.SendMessage;
 import com.ibexmc.epidemic.util.SpigotVersion;
 import com.ibexmc.epidemic.remedy.player.*;
 import com.ibexmc.epidemic.util.functions.*;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -66,6 +66,8 @@ public class Remedy {
     private int coldReliefSeconds = 0;                                      // Number of seconds to apply cold relief (0 = none)
     private int heatReliefSeconds = 0;                                      // Number of seconds to apply heat relief (0 = none)
     private boolean applyOthers = true;                                     // Flag to indicate if you can apply the remedy to others
+    private String itemsAdderID = "";                                       // ItemsAdder namespaced ID
+    private int customModelData = 0;                                        // Custom Model Data for the item
     //endregion
     //region Constructors
     /**
@@ -187,6 +189,18 @@ public class Remedy {
             enchantedGlow = crEnchantedGlow.getBoolean();
         } else {
             enchantedGlow = false;
+        }
+
+        // Custom Model Data
+        ConfigParser.ConfigReturn crCustomModelData = configParser.getIntValue(
+                "custom_model_data",
+                0,
+                false
+        );
+        if (crCustomModelData.isSuccess()) {
+            customModelData = crCustomModelData.getInt();
+        } else {
+            customModelData = 0;
         }
 
         // Recipe
@@ -415,6 +429,16 @@ public class Remedy {
             applyOthers = true;
         }
 
+        // ItemsAdder ID
+        ConfigParser.ConfigReturn crItemsAdderID = configParser.getStringValue(
+                "items_adder_id",
+                "",
+                false
+        );
+        if (crItemsAdderID.isSuccess()) {
+            itemsAdderID = crItemsAdderID.getString();
+        }
+
         if (activeFile) {
             if (recipe != null) {
                 this.recipe.setKey(this.namespacedKey.getKey());
@@ -496,15 +520,16 @@ public class Remedy {
                 EpidemicCraftRecipe.Row top = epidemicCraftRecipe.getTop();
                 EpidemicCraftRecipe.Row middle = epidemicCraftRecipe.getMiddle();
                 EpidemicCraftRecipe.Row bottom = epidemicCraftRecipe.getBottom();
-                fileConfig.set("recipe.craft.top.left", top.getLeft().name());
-                fileConfig.set("recipe.craft.top.center", top.getCenter().name());
-                fileConfig.set("recipe.craft.top.right", top.getRight().name());
-                fileConfig.set("recipe.craft.middle.left", middle.getLeft().name());
-                fileConfig.set("recipe.craft.middle.center", middle.getCenter().name());
-                fileConfig.set("recipe.craft.middle.right", middle.getRight().name());
-                fileConfig.set("recipe.craft.bottom.left", bottom.getLeft().name());
-                fileConfig.set("recipe.craft.bottom.center", bottom.getCenter().name());
-                fileConfig.set("recipe.craft.bottom.right", bottom.getRight().name());
+
+                saveIngredient(fileConfig, "recipe.craft.top.left", top.getLeft());
+                saveIngredient(fileConfig, "recipe.craft.top.center", top.getCenter());
+                saveIngredient(fileConfig, "recipe.craft.top.right", top.getRight());
+                saveIngredient(fileConfig, "recipe.craft.middle.left", middle.getLeft());
+                saveIngredient(fileConfig, "recipe.craft.middle.center", middle.getCenter());
+                saveIngredient(fileConfig, "recipe.craft.middle.right", middle.getRight());
+                saveIngredient(fileConfig, "recipe.craft.bottom.left", bottom.getLeft());
+                saveIngredient(fileConfig, "recipe.craft.bottom.center", bottom.getCenter());
+                saveIngredient(fileConfig, "recipe.craft.bottom.right", bottom.getRight());
             } else if (recipe instanceof EpidemicFurnaceRecipe) {
                 EpidemicFurnaceRecipe epidemicFurnaceRecipe = (EpidemicFurnaceRecipe) recipe;
                 fileConfig.set("recipe.furnace.item", epidemicFurnaceRecipe.getSource().name());
@@ -569,6 +594,12 @@ public class Remedy {
         fileConfig.set("symptom_relief_seconds", this.symptomReliefSeconds);
         fileConfig.set("cold_relief_seconds", this.coldReliefSeconds);
         fileConfig.set("heat_relief_seconds", this.heatReliefSeconds);
+        fileConfig.set("items_adder_id", this.itemsAdderID);
+        if (this.customModelData > 0) {
+            fileConfig.set("custom_model_data", this.customModelData);
+        } else {
+            fileConfig.set("custom_model_data", null);
+        }
 
         try {
             fileConfig.save(remedyFile);
@@ -578,6 +609,18 @@ public class Remedy {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
+
+    private void saveIngredient(FileConfiguration config, String path, EpidemicCraftRecipe.Ingredient ingredient) {
+        if (ingredient == null || ingredient.isAir()) {
+            config.set(path, null);
+        } else if (ingredient.isItemsAdder()) {
+            config.set(path, "ITEMSADDER:" + ingredient.getItemsAdderID());
+        } else if (ingredient.hasCustomModelData()) {
+            config.set(path, "CUSTOMMODELDATA:" + ingredient.getMaterial().name() + ":" + ingredient.getCustomModelData());
+        } else {
+            config.set(path, ingredient.getMaterial().name());
         }
     }
 
@@ -608,7 +651,7 @@ public class Remedy {
             
             if (recipe instanceof EpidemicCraftRecipe) {
                 EpidemicCraftRecipe epidemicCraftRecipe = (EpidemicCraftRecipe) recipe;
-                
+
                 newRecipe = new ShapedRecipe(recipe.getKey(), recipe.getResult()); // Create a new recipe for our named key and item
 
                 ((ShapedRecipe) newRecipe).shape(
@@ -616,39 +659,50 @@ public class Remedy {
                         epidemicCraftRecipe.getShapeMiddle(),
                         epidemicCraftRecipe.getShapeBottom()
                 );
-                if (epidemicCraftRecipe.getTop().getLeft() != Material.AIR) {
-                    ((ShapedRecipe) newRecipe).setIngredient('A', epidemicCraftRecipe.getTop().getLeft());
-                }
-                if (epidemicCraftRecipe.getTop().getCenter() != Material.AIR) {
-                    ((ShapedRecipe) newRecipe).setIngredient('B', epidemicCraftRecipe.getTop().getCenter());
-                }
-                if (epidemicCraftRecipe.getTop().getRight() != Material.AIR) {
-                    ((ShapedRecipe) newRecipe).setIngredient('C', epidemicCraftRecipe.getTop().getRight());
-                }
-                if (epidemicCraftRecipe.getMiddle().getLeft() != Material.AIR) {
-                    ((ShapedRecipe) newRecipe).setIngredient('D', epidemicCraftRecipe.getMiddle().getLeft());
-                }
-                if (epidemicCraftRecipe.getMiddle().getCenter() != Material.AIR) {
-                    ((ShapedRecipe) newRecipe).setIngredient('E', epidemicCraftRecipe.getMiddle().getCenter());
-                }
-                if (epidemicCraftRecipe.getMiddle().getRight() != Material.AIR) {
-                    ((ShapedRecipe) newRecipe).setIngredient('F', epidemicCraftRecipe.getMiddle().getRight());
-                }
-                if (epidemicCraftRecipe.getBottom().getLeft() != Material.AIR) {
-                    ((ShapedRecipe) newRecipe).setIngredient('G', epidemicCraftRecipe.getBottom().getLeft());
-                }
-                if (epidemicCraftRecipe.getBottom().getCenter() != Material.AIR) {
-                    ((ShapedRecipe) newRecipe).setIngredient('H', epidemicCraftRecipe.getBottom().getCenter());
-                }
-                if (epidemicCraftRecipe.getBottom().getRight() != Material.AIR) {
-                    ((ShapedRecipe) newRecipe).setIngredient('I', epidemicCraftRecipe.getBottom().getRight());
+
+                char[] keys = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
+                EpidemicCraftRecipe.Ingredient[] ingredients = {
+                        epidemicCraftRecipe.getTop().getLeft(),
+                        epidemicCraftRecipe.getTop().getCenter(),
+                        epidemicCraftRecipe.getTop().getRight(),
+                        epidemicCraftRecipe.getMiddle().getLeft(),
+                        epidemicCraftRecipe.getMiddle().getCenter(),
+                        epidemicCraftRecipe.getMiddle().getRight(),
+                        epidemicCraftRecipe.getBottom().getLeft(),
+                        epidemicCraftRecipe.getBottom().getCenter(),
+                        epidemicCraftRecipe.getBottom().getRight()
+                };
+
+                for (int i = 0; i < keys.length; i++) {
+                    EpidemicCraftRecipe.Ingredient ingredient = ingredients[i];
+                    if (!ingredient.isAir()) {
+                        if (ingredient.isItemsAdder()) {
+                            ItemStack iaItem = ItemFunctions.getItemsAdderItem(ingredient.getItemsAdderID());
+                            if (iaItem != null) {
+                                ((ShapedRecipe) newRecipe).setIngredient(keys[i], new RecipeChoice.ExactChoice(iaItem));
+                            } else {
+                                Logging.log("Remedy", "ItemsAdder item not found for recipe: " + ingredient.getItemsAdderID());
+                                // Fallback to AIR or something? If IA item missing, recipe might be broken.
+                            }
+                        } else if (ingredient.hasCustomModelData()) {
+                            ItemStack cmdItem = new ItemStack(ingredient.getMaterial());
+                            ItemMeta cmdMeta = cmdItem.getItemMeta();
+                            if (cmdMeta != null) {
+                                cmdMeta.setCustomModelData(ingredient.getCustomModelData());
+                                cmdItem.setItemMeta(cmdMeta);
+                            }
+                            ((ShapedRecipe) newRecipe).setIngredient(keys[i], new RecipeChoice.ExactChoice(cmdItem));
+                        } else {
+                            ((ShapedRecipe) newRecipe).setIngredient(keys[i], ingredient.getMaterial());
+                        }
+                    }
                 }
             } else if (recipe instanceof EpidemicFurnaceRecipe) {
                 EpidemicFurnaceRecipe epidemicFurnaceRecipe = (EpidemicFurnaceRecipe) recipe;
                 newRecipe = new FurnaceRecipe(
                         recipe.getKey(),
                         recipe.getResult(),
-                        epidemicFurnaceRecipe.getSource(),
+                        new RecipeChoice.MaterialChoice(epidemicFurnaceRecipe.getSource()),
                         epidemicFurnaceRecipe.getExperience(),
                         epidemicFurnaceRecipe.getTime() * 20
                 );
@@ -702,13 +756,34 @@ public class Remedy {
      * @return ItemStack This returns a pre-built ItemStack for the Remedy
      */
     public ItemStack getItemStack(int amount) {
-        ItemStack itemStack = new ItemStack(this.baseItem, amount);
+        ItemStack itemStack;
+        boolean isItemsAdder = false;
+        if (Epidemic.instance().dependencies().hasItemsAdder() && !this.itemsAdderID.isEmpty()) {
+            itemStack = ItemFunctions.getItemsAdderItem(this.itemsAdderID);
+            if (itemStack != null) {
+                itemStack.setAmount(amount);
+                isItemsAdder = true;
+            } else {
+                itemStack = new ItemStack(this.baseItem, amount);
+            }
+        } else {
+            itemStack = new ItemStack(this.baseItem, amount);
+        }
+
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(StringFunctions.colorToString(this.displayName));
+        if (itemMeta == null) return itemStack;
 
-        itemMeta.setLore(StringFunctions.colorStringList(this.lore));
+        // Only override name and lore if it's NOT an ItemsAdder item, 
+        // OR if you specifically want Epidemic to override IA settings.
+        // Usually, if they use ItemsAdder, they want IA to handle look and feel.
+        // But for uses, we MUST add our PDC keys.
 
-        // Setting uses
+        if (!isItemsAdder) {
+            itemMeta.setDisplayName(StringFunctions.colorToString(this.displayName));
+            itemMeta.setLore(StringFunctions.colorStringList(this.lore));
+        }
+
+        // Setting uses - always apply for Epidemic tracking
         if (SpigotVersion.is114Safe()) {
             if (this.itemUses > 0) {
                 PersistentDataContainer container = itemMeta.getPersistentDataContainer();
@@ -716,30 +791,34 @@ public class Remedy {
                 container.set(useKey, PersistentDataType.INTEGER, itemUses);
                 NamespacedKey maxKey = new NamespacedKey(plugin, "epi_max_uses");
                 container.set(maxKey, PersistentDataType.INTEGER, itemUses);
-                List<String> newLore = new ArrayList<>();
-                if (this.lore != null) {
-                    newLore.addAll(this.lore);
-                }
-                newLore.add(StringFunctions.getItemUsesLine(this.itemUses, this.itemUses));
-                itemMeta.setLore(StringFunctions.colorStringList(newLore));
+                
+                // If it's an IA item, we might want to APPEND the uses lore if it's not already there.
+                // For now, let's keep it consistent with vanilla remedies.
+                List<String> currentLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
+                currentLore.add(StringFunctions.getItemUsesLine(this.itemUses, this.itemUses));
+                itemMeta.setLore(currentLore);
             }
         }
 
         if (itemMeta instanceof PotionMeta) {
-            PotionMeta potionMeta = (PotionMeta) itemMeta; // Cast the meta data to PotionMeta
+            PotionMeta potionMeta = (PotionMeta) itemMeta;
             if (this.potionColor != null) {
-                potionMeta.setColor(this.potionColor); // Set the color via the meta data
+                potionMeta.setColor(this.potionColor);
             }
             potionMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            itemStack.setItemMeta(potionMeta); // Set the meta data to the item
         } else {
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            itemStack.setItemMeta(itemMeta);
         }
 
-        if (this.enchantedGlow) {
+        if (this.customModelData > 0) {
+            itemMeta.setCustomModelData(this.customModelData);
+        }
+        
+        itemStack.setItemMeta(itemMeta);
+
+        if (this.enchantedGlow && !isItemsAdder) { // Usually IA items have their own glow settings
             if (baseItem == Material.FISHING_ROD) {
-                itemStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+                itemStack.addUnsafeEnchantment(Enchantment.INFINITY, 1);
             } else {
                 itemStack.addUnsafeEnchantment(Enchantment.LURE, 1);
             }
@@ -759,6 +838,11 @@ public class Remedy {
         if (itemStack == null) {
             return false;
         }
+
+        if (Epidemic.instance().dependencies().hasItemsAdder() && !this.itemsAdderID.isEmpty()) {
+            return ItemFunctions.isItemsAdderItem(itemStack, this.itemsAdderID);
+        }
+
         Material material = itemStack.getType();
         List<String> lore = new ArrayList<>();
         String name = "";
@@ -776,6 +860,13 @@ public class Remedy {
             // Fails match because material does not match
             return false;
         }
+
+        if (this.customModelData > 0) {
+            if (itemMeta == null || !itemMeta.hasCustomModelData() || itemMeta.getCustomModelData() != this.customModelData) {
+                return false;
+            }
+        }
+
         if (
                 !ChatColor.stripColor(
                     StringFunctions.colorToString(displayName)

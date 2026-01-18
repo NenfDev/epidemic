@@ -14,7 +14,7 @@ public class Insomnia {
      */
     public static void applyInsomnia(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 if (afflicted.getAilment().isInsomnia()) {
                     Epidemic.instance().data().putInsomniaPlayers(player.getUniqueId(), true);
                 }

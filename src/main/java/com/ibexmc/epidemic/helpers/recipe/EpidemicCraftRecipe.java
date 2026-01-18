@@ -7,6 +7,54 @@ import com.ibexmc.epidemic.util.functions.StringFunctions;
 
 public class EpidemicCraftRecipe implements EpidemicRecipe {
 
+    public static class Ingredient {
+        private Material material;
+        private String itemsAdderID;
+        private int customModelData = 0;
+
+        public Ingredient(Material material) {
+            this.material = material;
+            this.itemsAdderID = "";
+            this.customModelData = 0;
+        }
+
+        public Ingredient(Material material, int customModelData) {
+            this.material = material;
+            this.itemsAdderID = "";
+            this.customModelData = customModelData;
+        }
+
+        public Ingredient(String itemsAdderID) {
+            this.material = Material.AIR;
+            this.itemsAdderID = itemsAdderID;
+            this.customModelData = 0;
+        }
+
+        public Material getMaterial() {
+            return material;
+        }
+
+        public String getItemsAdderID() {
+            return itemsAdderID;
+        }
+
+        public int getCustomModelData() {
+            return customModelData;
+        }
+
+        public boolean hasCustomModelData() {
+            return customModelData > 0;
+        }
+
+        public boolean isItemsAdder() {
+            return itemsAdderID != null && !itemsAdderID.isEmpty();
+        }
+
+        public boolean isAir() {
+            return !isItemsAdder() && material == Material.AIR;
+        }
+    }
+
     //region Objects
     private NamespacedKey key;
     private EpidemicCraftRecipe.Row top;
@@ -97,17 +145,17 @@ public class EpidemicCraftRecipe implements EpidemicRecipe {
      */
     public String getShapeTop() {
         String shapeText = "";
-        if (this.top.getLeft() == Material.AIR) {
+        if (this.top.getLeft().isAir()) {
             shapeText = shapeText + " ";
         } else {
             shapeText = shapeText + "A";
         }
-        if (this.top.getCenter() == Material.AIR) {
+        if (this.top.getCenter().isAir()) {
             shapeText = shapeText + " ";
         } else {
             shapeText = shapeText + "B";
         }
-        if (this.top.getRight() == Material.AIR) {
+        if (this.top.getRight().isAir()) {
             shapeText = shapeText + " ";
         } else {
             shapeText = shapeText + "C";
@@ -121,17 +169,17 @@ public class EpidemicCraftRecipe implements EpidemicRecipe {
      */
     public String getShapeMiddle() {
         String shapeText = "";
-        if (this.middle.getLeft() == Material.AIR) {
+        if (this.middle.getLeft().isAir()) {
             shapeText = shapeText + " ";
         } else {
             shapeText = shapeText + "D";
         }
-        if (this.middle.getCenter() == Material.AIR) {
+        if (this.middle.getCenter().isAir()) {
             shapeText = shapeText + " ";
         } else {
             shapeText = shapeText + "E";
         }
-        if (this.middle.getRight() == Material.AIR) {
+        if (this.middle.getRight().isAir()) {
             shapeText = shapeText + " ";
         } else {
             shapeText = shapeText + "F";
@@ -145,17 +193,17 @@ public class EpidemicCraftRecipe implements EpidemicRecipe {
      */
     public String getShapeBottom() {
         String shapeText = "";
-        if (this.bottom.getLeft() == Material.AIR) {
+        if (this.bottom.getLeft().isAir()) {
             shapeText = shapeText + " ";
         } else {
             shapeText = shapeText + "G";
         }
-        if (this.bottom.getCenter() == Material.AIR) {
+        if (this.bottom.getCenter().isAir()) {
             shapeText = shapeText + " ";
         } else {
             shapeText = shapeText + "H";
         }
-        if (this.bottom.getRight() == Material.AIR) {
+        if (this.bottom.getRight().isAir()) {
             shapeText = shapeText + " ";
         } else {
             shapeText = shapeText + "I";
@@ -166,12 +214,12 @@ public class EpidemicCraftRecipe implements EpidemicRecipe {
     //region Sub-Classes
     public static class Row {
         //region Objects
-        private Material left;
-        private Material center;
-        private Material right;
+        private Ingredient left;
+        private Ingredient center;
+        private Ingredient right;
         //endregion
         //region Constructors
-        public Row(Material left, Material center, Material right) {
+        public Row(Ingredient left, Ingredient center, Ingredient right) {
             this.left = left;
             this.center = center;
             this.right = right;
@@ -180,50 +228,50 @@ public class EpidemicCraftRecipe implements EpidemicRecipe {
         //region Getters & Setters
 
         /**
-         * Gets the left Material for this Row
-         * @return Material in Left position of this Row
+         * Gets the left Ingredient for this Row
+         * @return Ingredient in Left position of this Row
          */
-        public Material getLeft() {
+        public Ingredient getLeft() {
             return left;
         }
 
         /**
-         * Sets the left Material for this row
-         * @param left Material to set
+         * Sets the left Ingredient for this row
+         * @param left Ingredient to set
          */
-        public void setLeft(Material left) {
+        public void setLeft(Ingredient left) {
             this.left = left;
         }
 
         /**
-         * Gets the center Material for this Row
-         * @return Material in center position of this Row
+         * Gets the center Ingredient for this Row
+         * @return Ingredient in center position of this Row
          */
-        public Material getCenter() {
+        public Ingredient getCenter() {
             return center;
         }
 
         /**
-         * Sets the center Material for this row
-         * @param center Material to set
+         * Sets the center Ingredient for this row
+         * @param center Ingredient to set
          */
-        public void setCenter(Material center) {
+        public void setCenter(Ingredient center) {
             this.center = center;
         }
 
         /**
-         * Gets the right Material for this Row
-         * @return Material in right position of this Row
+         * Gets the right Ingredient for this Row
+         * @return Ingredient in right position of this Row
          */
-        public Material getRight() {
+        public Ingredient getRight() {
             return right;
         }
 
         /**
-         * Sets the right Material for this row
-         * @param right Material to set
+         * Sets the right Ingredient for this row
+         * @param right Ingredient to set
          */
-        public void setRight(Material right) {
+        public void setRight(Ingredient right) {
             this.right = right;
         }
         //endregion

@@ -218,9 +218,9 @@ public class Temperature {
      */
     public void applyTemperature() {
 
-        if (player.getGameMode().equals(GameMode.CREATIVE)) {
-            Logging.debug("Temperature", "applyTemperature", "Skipping player as they are in creative");
-            return; // This player has the invincible permission or is in creative mode
+        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) {
+            Logging.debug("Temperature", "applyTemperature", "Skipping player as they are in creative or spectator");
+            return; // This player is in creative or spectator mode
         }
         if (Permission.inBypass(player)) {
             Logging.debug("Temperature", "applyTemperature", "Skipping player as they have bypass mode on");
@@ -337,7 +337,7 @@ public class Temperature {
             //      5 = 5 * 0.2 = 1
             //      6 = 6 * 0.2 = 1.2
             //      7 = 7 * 0.2 = 1.4
-            modifier = modifier + ((playerTemperature.getTemp() * 0.2d) * -1); //
+            modifier = modifier + (playerTemperature.getTemp() * 0.2d);
         }
 
         // Cycle modifier

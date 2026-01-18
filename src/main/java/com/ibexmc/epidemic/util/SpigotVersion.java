@@ -59,13 +59,29 @@ public class SpigotVersion {
         return Bukkit.getServer().getClass().getPackage().getName().contains("v1_19");
     }
 
+    /**
+     * Checks if the current Spigot version is 1.20.x
+     * @return If true, it is the current version
+     */
+    private static boolean is120() {
+        return Bukkit.getServer().getClass().getPackage().getName().contains("v1_20");
+    }
+
+    /**
+     * Checks if the current Spigot version is 1.21.x
+     * @return If true, it is the current version
+     */
+    private static boolean is121() {
+        return Bukkit.getServer().getClass().getPackage().getName().contains("v1_21");
+    }
+
 
     /**
      * Checks if the current Spigot version is 1.13.x safe
      * @return If true, it is version safe
      */
     public static boolean is113Safe() {
-        return is113() || is114() || is115() || is116() || is117() || is118() || is119();
+        return is113() || is114() || is115() || is116() || is117() || is118() || is119() || is120() || is121();
     }
 
     /**
@@ -73,7 +89,7 @@ public class SpigotVersion {
      * @return If true, it is version safe
      */
     public static boolean is114Safe() {
-        return is114() || is115() || is116() || is117() || is118() || is119();
+        return is114() || is115() || is116() || is117() || is118() || is119() || is120() || is121();
     }
 
     /**
@@ -81,7 +97,7 @@ public class SpigotVersion {
      * @return If true, it is version safe
      */
     public static boolean is115Safe() {
-        return is115() || is116() || is117() || is118() || is119();
+        return is115() || is116() || is117() || is118() || is119() || is120() || is121();
     }
 
     /**
@@ -89,7 +105,7 @@ public class SpigotVersion {
      * @return If true, it is version safe
      */
     public static boolean is116Safe() {
-        return is116() || is117() || is118() || is119();
+        return is116() || is117() || is118() || is119() || is120() || is121();
     }
 
     /**
@@ -97,7 +113,7 @@ public class SpigotVersion {
      * @return If true, it is version safe
      */
     public static boolean is117Safe() {
-        return is117() || is118() || is119();
+        return is117() || is118() || is119() || is120() || is121();
     }
 
     /**
@@ -105,7 +121,7 @@ public class SpigotVersion {
      * @return If true, it is version safe
      */
     public static boolean is118Safe() {
-        return is118() || is119();
+        return is118() || is119() || is120() || is121();
     }
 
     /**
@@ -113,7 +129,6 @@ public class SpigotVersion {
      * @return If true, it is version safe
      */
     public static boolean is119Safe() {
-        return is119();
+        return is119() || is120() || is121();
     }
-
 }

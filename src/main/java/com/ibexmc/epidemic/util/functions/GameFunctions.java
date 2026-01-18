@@ -2,8 +2,8 @@ package com.ibexmc.epidemic.util.functions;
 
 import com.ibexmc.epidemic.Epidemic;
 import com.ibexmc.epidemic.util.Logging;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;

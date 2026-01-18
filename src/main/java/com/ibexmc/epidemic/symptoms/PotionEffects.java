@@ -19,7 +19,7 @@ public class PotionEffects {
     public static void applyPotionEffects(Player player, Afflicted afflicted) {
         if (player != null)
         {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 if (afflicted.getAilment().getAilmentEffects() != null) {
                     for (PlayerPotionEffect ape : afflicted.getAilment().getAilmentEffects()) {
                         player.removePotionEffect(ape.getPotionEffectType());
@@ -76,7 +76,7 @@ public class PotionEffects {
                 "confusion(Player, int, int)",
                 "Confusion Applied | Duration: " + duration + " ticks | Amplifier: " + amplifier
         );
-        PotionEffect potionEffect = new PotionEffect(PotionEffectType.CONFUSION, duration, amplifier);
+        PotionEffect potionEffect = new PotionEffect(PotionEffectType.NAUSEA, duration, amplifier);
         player.addPotionEffect(potionEffect);
     }
 
@@ -98,7 +98,7 @@ public class PotionEffects {
      * @param amplifier Effect amplifier
      */
     public static void harm(Player player, int duration, int amplifier) {
-        PotionEffect potionEffect = new PotionEffect(PotionEffectType.HARM, duration, amplifier);
+        PotionEffect potionEffect = new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, amplifier);
         player.addPotionEffect(potionEffect);
     }
 
@@ -131,7 +131,7 @@ public class PotionEffects {
      * @param amplifier Effect amplifier
      */
     public static void slow(Player player, int duration, int amplifier) {
-        PotionEffect potionEffect = new PotionEffect(PotionEffectType.SLOW, duration, amplifier);
+        PotionEffect potionEffect = new PotionEffect(PotionEffectType.SLOWNESS, duration, amplifier);
         player.addPotionEffect(potionEffect);
     }
 
@@ -142,7 +142,7 @@ public class PotionEffects {
      * @param amplifier Effect amplifier
      */
     public static void slowDigging(Player player, int duration, int amplifier) {
-        PotionEffect potionEffect = new PotionEffect(PotionEffectType.SLOW_DIGGING, duration, amplifier);
+        PotionEffect potionEffect = new PotionEffect(PotionEffectType.MINING_FATIGUE, duration, amplifier);
         player.addPotionEffect(potionEffect);
     }
 

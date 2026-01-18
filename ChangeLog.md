@@ -1,3 +1,10 @@
+Change Log 1.7.13
+- Added CustomModelData support for remedies and crafting ingredients
+- Fixed symptom timing bug where particles/sounds played before symptoms started
+- Added native MythicMobs skill: epidemicAfflict
+- Added native MythicMobs condition: hasAilment
+- Added GUI customization for remedy recipe textures (configurable materials and CMD)
+
 Change Log 1.7.9
 Bug Fixes
 - Added Hazmat/Gas mask check for hotspots

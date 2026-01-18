@@ -29,7 +29,7 @@ public class RemoveXP {
      */
     public static void applyRemoveXP(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 if (afflicted.getAilment().getRemoveXP() > 0) {
                     remove(player, afflicted.getAilment().getRemoveXP());
                 }

@@ -40,7 +40,7 @@ public class Food {
      */
     public static void applyRotFood(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
                 if (afflicted.getAilment().isFoodRot()) {
                     rotFood(player);
                 }

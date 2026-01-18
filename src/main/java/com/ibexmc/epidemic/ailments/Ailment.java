@@ -2113,33 +2113,51 @@ public class Ailment {
     }
 
     /**
+     * Checks if the player should bypass symptoms or affliction based on game mode or permissions.
+     * @param player Player to check
+     * @return True if the player should bypass
+     */
+    public boolean shouldBypass(Player player) {
+        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) {
+            return true;
+        }
+        if (Permission.inBypass(player)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Uses various checks to check if the player should be considered invincible for this ailment at this
      * time.  Checks include: Gamemode, bypass, permission, world, ailment, and grace period
      * @param player Player to check
      * @return True if the player is invincible
      */
     public boolean invincible(Player player) {
+        return invincible(player, true);
+    }
+
+    /**
+     * Uses various checks to check if the player should be considered invincible for this ailment at this
+     * time.  Checks include: Gamemode, bypass, permission, world, ailment, and grace period
+     * @param player Player to check
+     * @param checkExisting If true, checks if the player already has the ailment and if they are in the grace period
+     * @return True if the player is invincible
+     */
+    public boolean invincible(Player player, boolean checkExisting) {
 
         Epidemic plugin = Epidemic.instance();
 
-        // Game mode check
-        if (player.getGameMode() != GameMode.SURVIVAL) {
+        // Bypass check (Game mode + Bypass permission)
+        if (shouldBypass(player)) {
             Logging.debug(
                     "Ailment",
                     "invincible()",
-                    "Player is not in survival mode"
+                    "Player in bypass mode or non-survival/adventure game mode"
             );
             return true;
         }
-        // Bypass
-        if (Permission.inBypass(player)) {
-            Logging.debug(
-                    "Ailment",
-                    "invincible()",
-                    "Player in bypass mode"
-            );
-            return true;
-        }
+
         // World check
         if (this.preventAfflictWorlds != null) {
             for (String prevent : this.preventAfflictWorlds) {
@@ -2153,37 +2171,40 @@ public class Ailment {
                 }
             }
         }
-        // Check if player already has ailment
-        Set<Afflicted> afflictions = plugin.data().getPlayerAfflictionsByUUID(player.getUniqueId());
-        if (afflictions != null) {
-            for (Afflicted afflicted : afflictions) {
-                if (afflicted.getAilment().getInternalName().equalsIgnoreCase(this.internalName)) {
-                    Logging.debug(
-                            "Ailment",
-                            "invincible()",
-                            "Player already has this ailment"
-                    );
-                    return true;
+
+        if (checkExisting) {
+            // Check if player already has ailment
+            Set<Afflicted> afflictions = plugin.data().getPlayerAfflictionsByUUID(player.getUniqueId());
+            if (afflictions != null) {
+                for (Afflicted afflicted : afflictions) {
+                    if (afflicted.getAilment().getInternalName().equalsIgnoreCase(this.internalName)) {
+                        Logging.debug(
+                                "Ailment",
+                                "invincible()",
+                                "Player already has this ailment"
+                        );
+                        return true;
+                    }
                 }
             }
-        }
-        // Grace period check
-        if (this.gracePeriod > 0) {
-            Timestamp lastHealedTimestamp = plugin.data().getLastHealed(
-                    player.getUniqueId(),
-                    this.internalName
-            );
-            if (lastHealedTimestamp != null) {
-                if (TimeFunctions.addSeconds(
-                        lastHealedTimestamp,
-                        this.gracePeriod
-                ).after(TimeFunctions.now())) {
-                    Logging.debug(
-                            "Ailment",
-                            "invincible()",
-                            "Player is in the grace period for this ailment"
-                    );
-                    return true;
+            // Grace period check
+            if (this.gracePeriod > 0) {
+                Timestamp lastHealedTimestamp = plugin.data().getLastHealed(
+                        player.getUniqueId(),
+                        this.internalName
+                );
+                if (lastHealedTimestamp != null) {
+                    if (TimeFunctions.addSeconds(
+                            lastHealedTimestamp,
+                            this.gracePeriod
+                    ).after(TimeFunctions.now())) {
+                        Logging.debug(
+                                "Ailment",
+                                "invincible()",
+                                "Player is in the grace period for this ailment"
+                        );
+                        return true;
+                    }
                 }
             }
         }
@@ -2241,11 +2262,34 @@ public class Ailment {
      */
     public void applySymptoms(Player player, Afflicted affliction) {
 
+        if (shouldBypass(player)) {
+            return;
+        }
+
         Logging.debug(
                 "Ailment",
                 "applySymptoms",
                 "Trying to apply symptoms now"
         );
+
+        long afflictedSeconds = (System.currentTimeMillis() - affliction.getStartTimestamp().getTime()) / 1000;
+        if (afflictedSeconds < this.timeToSymptoms) {
+            Logging.debug(
+                    "Ailment",
+                    "applySymptoms",
+                    "Not applying symptoms yet, time to symptoms: " + this.timeToSymptoms + " seconds. " +
+                            "Player has been afflicted for " + afflictedSeconds + " seconds."
+            );
+            return;
+        }
+
+        if (!affliction.isSymptomsStarted()) {
+            if (this.symptomText != null && !this.symptomText.isEmpty()) {
+                SendMessage.Player("na", this.symptomText, player, true, null);
+            }
+            affliction.setSymptomsStarted(true);
+            Epidemic.instance().data().savePlayer(player);
+        }
 
         String playerWorldName = player.getLocation().getWorld().getName();
 

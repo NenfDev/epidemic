@@ -66,7 +66,7 @@ public class Rust {
      */
     public static void applyRust(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
                 if (afflicted.getAilment().isRust()) {
                     if (afflicted.getAilment().getRustAmount() > 0) {
                         rust(player, afflicted.getAilment().getRustAmount());

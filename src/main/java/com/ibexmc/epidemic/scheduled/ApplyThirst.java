@@ -27,7 +27,7 @@ public class ApplyThirst {
                 if (player.getLocation().getWorld().hasStorm()) {
                     apply = false;
                 }
-                if (player.getGameMode() != GameMode.SURVIVAL) {
+                if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) {
                     apply = false;
                 }
                 if (Permission.inBypass(player)) {

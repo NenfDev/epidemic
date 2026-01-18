@@ -13,7 +13,6 @@ import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 import java.util.List;
@@ -80,7 +79,7 @@ public class InfectedSplashPotion implements IEquipment {
                 PotionMeta potionMeta = (PotionMeta) itemMeta;
                 potionMeta.setDisplayName(StringFunctions.colorToString(this.name));
                 potionMeta.setLore(StringFunctions.colorStringList(this.lore));
-                potionMeta.setBasePotionData(new PotionData(PotionType.AWKWARD));
+                potionMeta.setBasePotionType(PotionType.AWKWARD);
                 potionMeta.setColor(potionColor);
                 splashPotion.setItemMeta(potionMeta);
             } else {

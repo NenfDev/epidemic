@@ -136,7 +136,7 @@ public class GasMask implements IEquipment {
                             item = PlayerFunctions.head(headUID);
                         } else {
                             String base64 = loader.base64Texture(defaultBase64);
-                            item = SkullCreator.itemFromBase64(base64);
+                            item = SkullCreator.itemWithBase64(item, base64);
                         }
                     }
                 }
@@ -239,7 +239,7 @@ public class GasMask implements IEquipment {
      * @return Default item
      */
     private ItemStack defaultItem() {
-        ItemStack defaultItem = SkullCreator.itemFromBase64(defaultBase64);
+        ItemStack defaultItem = SkullCreator.itemWithBase64(new ItemStack(Material.PLAYER_HEAD), defaultBase64);
         if (defaultItem != null) {
             ItemMeta itemMeta = defaultItem.getItemMeta();
             if (itemMeta != null) {

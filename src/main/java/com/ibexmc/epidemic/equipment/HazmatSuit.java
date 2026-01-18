@@ -7,7 +7,6 @@ import com.ibexmc.epidemic.recipe.RecipeManager;
 import com.ibexmc.epidemic.recipe.RecipePosition;
 import com.ibexmc.epidemic.util.Logging;
 import com.ibexmc.epidemic.util.SkullCreator;
-import com.ibexmc.epidemic.util.SpigotVersion;
 import com.ibexmc.epidemic.util.functions.*;
 import com.ibexmc.epidemic.util.log.Error;
 import org.bukkit.Material;
@@ -213,7 +212,7 @@ public class HazmatSuit implements IEquipment {
                             this.helmet = PlayerFunctions.head(headUID);
                         } else {
                             String base64 = loader.base64Texture("helmet.texture", defaultBase64);
-                            this.helmet = SkullCreator.itemFromBase64(base64);
+                            this.helmet = SkullCreator.itemWithBase64(this.helmet, base64);
                         }
                     }
                 }
@@ -388,7 +387,7 @@ public class HazmatSuit implements IEquipment {
      * @return Default item
      */
     private ItemStack defaultHelmet() {
-        ItemStack defaultItem = SkullCreator.itemFromBase64(defaultBase64);
+        ItemStack defaultItem = SkullCreator.itemWithBase64(new ItemStack(Material.PLAYER_HEAD), defaultBase64);
         if (defaultItem != null) {
             defaultItem.setAmount(this.amount);
             ItemMeta itemMeta = defaultItem.getItemMeta();

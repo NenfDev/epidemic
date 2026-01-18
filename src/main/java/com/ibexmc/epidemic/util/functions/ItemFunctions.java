@@ -167,4 +167,44 @@ public class ItemFunctions {
             return null;
         }
     }
+
+    /**
+     * Checks if the ItemStack is an ItemsAdder custom item with the specified ID
+     * @param item ItemStack to check
+     * @param id ItemsAdder namespaced ID
+     * @return true if it matches
+     */
+    public static boolean isItemsAdderItem(ItemStack item, String id) {
+        if (item == null || id == null || id.isEmpty()) return false;
+        try {
+            Class<?> customStackClass = Class.forName("dev.lone.itemsadder.api.CustomStack");
+            java.lang.reflect.Method getInstanceMethod = customStackClass.getMethod("byItemStack", ItemStack.class);
+            Object customStack = getInstanceMethod.invoke(null, item);
+            if (customStack != null) {
+                java.lang.reflect.Method getNamespacedIDMethod = customStack.getClass().getMethod("getNamespacedID");
+                String namespacedID = (String) getNamespacedIDMethod.invoke(customStack);
+                return namespacedID.equalsIgnoreCase(id);
+            }
+        } catch (Exception ignored) {}
+        return false;
+    }
+
+    /**
+     * Gets an ItemStack from ItemsAdder by its namespaced ID
+     * @param id ItemsAdder namespaced ID
+     * @return ItemStack or null if not found or ItemsAdder not installed
+     */
+    public static ItemStack getItemsAdderItem(String id) {
+        if (id == null || id.isEmpty()) return null;
+        try {
+            Class<?> customStackClass = Class.forName("dev.lone.itemsadder.api.CustomStack");
+            java.lang.reflect.Method getInstanceMethod = customStackClass.getMethod("getInstance", String.class);
+            Object customStack = getInstanceMethod.invoke(null, id);
+            if (customStack != null) {
+                java.lang.reflect.Method getItemStackMethod = customStack.getClass().getMethod("getItemStack");
+                return (ItemStack) getItemStackMethod.invoke(customStack);
+            }
+        } catch (Exception ignored) {}
+        return null;
+    }
 }

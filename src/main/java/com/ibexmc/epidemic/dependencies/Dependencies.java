@@ -4,16 +4,19 @@ import com.ibexmc.epidemic.Epidemic;
 import com.ibexmc.epidemic.util.Logging;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
-import com.ibexmc.domain.Domain;
+
+import java.lang.reflect.Method;
 
 public class Dependencies {
-    // Domain
+    // Domain (optional)
     private boolean hasDomain = false;
-    private Domain domain;
+    private Plugin domainPlugin;
+    private Object domainApi;
 
     /**
-     * Hooks into Domain
+     * Hooks into Domain using reflection (optional dependency)
      * @return If true, hooked in successfully
      */
     public boolean hookDomain()
@@ -22,22 +25,24 @@ public class Dependencies {
 
         if (plug != null)
         {
-            domain = ((Domain) plug);
-            hasDomain = true;
-            Logging.debug("Dependencies", "hookDomain", "Domain Found");
-            return true;
+            try {
+                Method getAPI = plug.getClass().getMethod("getAPI");
+                Object api = getAPI.invoke(plug);
+                this.domainPlugin = plug;
+                this.domainApi = api;
+                hasDomain = (api != null);
+                Logging.debug("Dependencies", "hookDomain", "Domain Found");
+                return hasDomain;
+            } catch (Exception ex) {
+                Logging.debug("Dependencies", "hookDomain", "Domain present but API not accessible: " + ex.getMessage());
+                hasDomain = false;
+                domainPlugin = null;
+                domainApi = null;
+                return false;
+            }
         } else {
             return false;
         }
-    }
-
-    /**
-     * Gets the Domain instance
-     * @return Domain instance
-     */
-    public com.ibexmc.domain.api.API getDomain()
-    {
-        return domain.getAPI();
     }
 
     /**
@@ -47,6 +52,35 @@ public class Dependencies {
     public boolean hasDomain()
     {
         return hasDomain;
+    }
+
+    /**
+     * Reflects Domain API: flagFromName
+     */
+    public Object flagFromName(String name) {
+        if (!hasDomain || domainApi == null) return null;
+        try {
+            Method m = domainApi.getClass().getMethod("flagFromName", String.class);
+            return m.invoke(domainApi, name);
+        } catch (Exception ex) {
+            Logging.debug("Dependencies", "flagFromName", "Error: " + ex.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Reflects Domain API: flagAtLocation
+     */
+    public boolean flagAtLocation(Object flag, Location location) {
+        if (!hasDomain || domainApi == null || flag == null || location == null) return false;
+        try {
+            Method m = domainApi.getClass().getMethod("flagAtLocation", flag.getClass(), Location.class);
+            Object res = m.invoke(domainApi, flag, location);
+            return (res instanceof Boolean) && ((Boolean) res);
+        } catch (Exception ex) {
+            Logging.debug("Dependencies", "flagAtLocation", "Error: " + ex.getMessage());
+            return false;
+        }
     }
 
     // WorldGuard
@@ -89,5 +123,37 @@ public class Dependencies {
      */
     public boolean hasWorldGuard() {
         return hasWorldGuard;
+    }
+
+    // ItemsAdder
+    private boolean hasItemsAdder = false;
+
+    public boolean hookItemsAdder() {
+        Plugin plug = Epidemic.instance().getServer().getPluginManager().getPlugin("ItemsAdder");
+        if (plug != null && plug.isEnabled()) {
+            hasItemsAdder = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasItemsAdder() {
+        return hasItemsAdder;
+    }
+
+    // MythicMobs
+    private boolean hasMythicMobs = false;
+
+    public boolean hookMythicMobs() {
+        Plugin plug = Epidemic.instance().getServer().getPluginManager().getPlugin("MythicMobs");
+        if (plug != null && plug.isEnabled()) {
+            hasMythicMobs = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasMythicMobs() {
+        return hasMythicMobs;
     }
 }

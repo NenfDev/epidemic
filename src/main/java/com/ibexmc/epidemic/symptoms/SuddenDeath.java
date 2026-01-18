@@ -43,7 +43,7 @@ public class SuddenDeath {
                                     " Random chance = " + random +
                                     " Ailment Sudden Death Chance: " + suddenDeathChance
                     );
-                    if (!afflicted.getAilment().invincible(player)) {
+                    if (!afflicted.getAilment().invincible(player, false)) {
                         if (random < suddenDeathChance) {
                             kill(player, afflicted.getAilment().suddenDeathMessage());
                         }

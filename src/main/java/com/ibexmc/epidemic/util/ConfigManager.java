@@ -3,6 +3,7 @@ package com.ibexmc.epidemic.util;
 import com.ibexmc.epidemic.Epidemic;
 import com.ibexmc.epidemic.util.functions.FileFunctions;
 
+import org.bukkit.Material;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,15 @@ public class ConfigManager {
     private boolean autoDiscoverRecipes = false;
     // Equipment
     private boolean disableEpidemicEquipment = false;
+
+    // GUI
+    private Material guiRemedyRecipeBorderItem = Material.BLACK_STAINED_GLASS_PANE;
+    private int guiRemedyRecipeBorderCMD = 0;
+    private Material guiRemedyRecipeBackItem = Material.RED_STAINED_GLASS_PANE;
+    private int guiRemedyRecipeBackCMD = 0;
+
+    // MythicMobs
+    private java.util.Map<String, com.ibexmc.epidemic.dependencies.MythicMobDisease> mythicMobDiseases = new java.util.HashMap<>();
 
 
     //endregion
@@ -483,6 +493,68 @@ public class ConfigManager {
         } else {
             this.disableEpidemicEquipment = false;
         }
+
+        //region GUI
+        ConfigParser.ConfigReturn crGuiBorderItem = ymlParser.getMaterialValue(
+                "gui.remedy_recipe.border_item",
+                Material.BLACK_STAINED_GLASS_PANE,
+                false
+        );
+        if (crGuiBorderItem.isSuccess()) {
+            this.guiRemedyRecipeBorderItem = crGuiBorderItem.getMaterial();
+        }
+
+        ConfigParser.ConfigReturn crGuiBorderCMD = ymlParser.getIntValue(
+                "gui.remedy_recipe.border_cmd",
+                0,
+                false
+        );
+        if (crGuiBorderCMD.isSuccess()) {
+            this.guiRemedyRecipeBorderCMD = crGuiBorderCMD.getInt();
+        }
+
+        ConfigParser.ConfigReturn crGuiBackItem = ymlParser.getMaterialValue(
+                "gui.remedy_recipe.back_item",
+                Material.RED_STAINED_GLASS_PANE,
+                false
+        );
+        if (crGuiBackItem.isSuccess()) {
+            this.guiRemedyRecipeBackItem = crGuiBackItem.getMaterial();
+        }
+
+        ConfigParser.ConfigReturn crGuiBackCMD = ymlParser.getIntValue(
+                "gui.remedy_recipe.back_cmd",
+                0,
+                false
+        );
+        if (crGuiBackCMD.isSuccess()) {
+            this.guiRemedyRecipeBackCMD = crGuiBackCMD.getInt();
+        }
+        //endregion
+
+        // MythicMobs loading
+        mythicMobDiseases.clear();
+        ConfigParser.ConfigReturn crMythicMobs = ymlParser.getConfigSection("mythicmobs", false);
+        if (crMythicMobs.isSuccess()) {
+            org.bukkit.configuration.ConfigurationSection mmSection = crMythicMobs.getConfigSection();
+            if (mmSection != null) {
+                for (String mobType : mmSection.getKeys(false)) {
+                    String ailment = mmSection.getString(mobType + ".ailment");
+                    int chance = mmSection.getInt(mobType + ".chance", 100);
+                    double severity = mmSection.getDouble(mobType + ".severity", 1.0);
+                    int cooldown = mmSection.getInt(mobType + ".cooldown", 0);
+                    boolean onHit = mmSection.getBoolean(mobType + ".on_hit", true);
+                    boolean onProximity = mmSection.getBoolean(mobType + ".on_proximity", false);
+                    int radius = mmSection.getInt(mobType + ".proximity_radius", 5);
+
+                    if (ailment != null) {
+                        mythicMobDiseases.put(mobType, new com.ibexmc.epidemic.dependencies.MythicMobDisease(
+                                ailment, chance, severity, cooldown, onHit, onProximity, radius
+                        ));
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -765,5 +837,25 @@ public class ConfigManager {
      * @return If true, disable equipment
      */
     public boolean isDisableEpidemicEquipment() { return disableEpidemicEquipment; }
+
+    public Material getGuiRemedyRecipeBorderItem() {
+        return guiRemedyRecipeBorderItem;
+    }
+
+    public int getGuiRemedyRecipeBorderCMD() {
+        return guiRemedyRecipeBorderCMD;
+    }
+
+    public Material getGuiRemedyRecipeBackItem() {
+        return guiRemedyRecipeBackItem;
+    }
+
+    public int getGuiRemedyRecipeBackCMD() {
+        return guiRemedyRecipeBackCMD;
+    }
+
+    public java.util.Map<String, com.ibexmc.epidemic.dependencies.MythicMobDisease> getMythicMobDiseases() {
+        return mythicMobDiseases;
+    }
     //endregion
 }

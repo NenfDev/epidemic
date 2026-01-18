@@ -2,6 +2,7 @@ package com.ibexmc.epidemic.util.functions;
 
 import com.ibexmc.epidemic.Epidemic;
 import org.bukkit.*;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -85,7 +86,7 @@ public class ParticleFunctions {
      */
     public static void displayParticleDust(Location particleLocation, int count, int r, int g, int b, int size) {
         Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(r, g, b), size);
-        particleLocation.getWorld().spawnParticle(Particle.REDSTONE, particleLocation, count, dustOptions);
+        particleLocation.getWorld().spawnParticle(Particle.DUST, particleLocation, count, dustOptions);
     }
 
     /**
@@ -101,7 +102,7 @@ public class ParticleFunctions {
     public static void displayParticleDustPlayer(Player player, Location particleLocation, int count, int r, int g, int b, int size) {
         Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(r, g, b), size);
 
-        player.spawnParticle(Particle.REDSTONE, particleLocation, count, dustOptions);
+        player.spawnParticle(Particle.DUST, particleLocation, count, dustOptions);
     }
 
     /**
@@ -128,7 +129,7 @@ public class ParticleFunctions {
                 for (double i = 0; i <= particleLocation1.distance(particleLocation2); i += 1.0) {
                     vector.multiply(i);
                     particleLocation1.add(vector);
-                    player.spawnParticle(Particle.REDSTONE, particleLocation1, count, dustOptions);
+                    player.spawnParticle(Particle.DUST, particleLocation1, count, dustOptions);
                     particleLocation1.subtract(vector);
                     vector.normalize();
                     if (step >= 15) {

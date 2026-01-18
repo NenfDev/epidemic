@@ -92,6 +92,7 @@ public class Epidemic extends JavaPlugin {
 
     // Config
     public ConfigManager config;
+    public ConfigManager config() { return config; }
 
     private final Dependencies dependencies = new Dependencies();
     public Dependencies dependencies() { return dependencies; }
@@ -115,6 +116,10 @@ public class Epidemic extends JavaPlugin {
             Bukkit.getPluginManager().registerEvents(new PlayerRespawn(), this);
             Bukkit.getPluginManager().registerEvents(new BlockBreak(), this);
             Bukkit.getPluginManager().registerEvents(new ProjectileEvents(), this);
+            Bukkit.getPluginManager().registerEvents(new com.ibexmc.epidemic.events.entity.MythicMobsEvents(), this);
+            if (dependencies.hasItemsAdder()) {
+                Bukkit.getPluginManager().registerEvents(new com.ibexmc.epidemic.events.ItemsAdderEvents(), this);
+            }
         } catch (Exception ex) {
             Error.save(
                     "Epidemic.loadEventListeners.001",
@@ -347,6 +352,15 @@ public class Epidemic extends JavaPlugin {
             Logging.log("Epidemic-WorldGuard", "&aWorldGuard dependency found");
         } else {
             Logging.log("Epidemic-WorldGuard", "&cWorldGuard dependency not found - WorldGuard checking for symptoms will not function");
+        }
+
+        if (dependencies.hookItemsAdder()) {
+            Logging.log("Epidemic-ItemsAdder", "&aItemsAdder dependency found");
+        }
+
+        if (dependencies.hookMythicMobs()) {
+            Logging.log("Epidemic-MythicMobs", "&aMythicMobs dependency found");
+            com.ibexmc.epidemic.dependencies.MythicMobsHook.register(this);
         }
 
         ServerManager.load();

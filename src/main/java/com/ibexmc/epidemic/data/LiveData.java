@@ -284,8 +284,13 @@ public class LiveData {
                                                 }
                                             }
 
+                                            boolean symptomsStarted = false;
+                                            if (playerFileConfig.contains("ailment." + ailmentInternalName + ".symptoms_started")) {
+                                                symptomsStarted = playerFileConfig.getBoolean("ailment." + ailmentInternalName + ".symptoms_started");
+                                            }
+
                                             // Add the affliction to the map
-                                            Afflicted afflicted = new Afflicted(player.getUniqueId(), ailment, Epidemic.instance().gameData().day().get(), Epidemic.instance().gameData().day().getWorld().getTime(), created, secondaryApplied);
+                                            Afflicted afflicted = new Afflicted(player.getUniqueId(), ailment, afflictDay, afflictTime, created, secondaryApplied, symptomsStarted);
                                             this.addPlayerAffliction(player.getUniqueId(), afflicted);
 
                                             afflictedCount++; // Increment counter of successful afflictions
@@ -577,6 +582,7 @@ public class LiveData {
                 fileConfig.set("ailment." + afflicted.getAilment().getInternalName() + ".afflict_day", afflicted.getAfflictDay());
                 fileConfig.set("ailment." + afflicted.getAilment().getInternalName() + ".afflict_time", afflicted.getAfflictTime());
                 fileConfig.set("ailment." + afflicted.getAilment().getInternalName() + ".secondary_applied", afflicted.isSecondaryApplied());
+                fileConfig.set("ailment." + afflicted.getAilment().getInternalName() + ".symptoms_started", afflicted.isSymptomsStarted());
             }
         } else {
             fileConfig.set("ailment", null); // Clear ailments

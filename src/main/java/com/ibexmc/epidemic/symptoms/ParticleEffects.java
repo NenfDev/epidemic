@@ -14,7 +14,7 @@ public class ParticleEffects {
      */
     public static void applyBleeding(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 if (afflicted.getAilment().isDisplayBleeding()) {
                     ParticleFunctions.bleed(
                             player,
@@ -39,7 +39,7 @@ public class ParticleEffects {
      */
     public static void applyVomit(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 if (afflicted.getAilment().isDisplayVomit()) {
                     ParticleFunctions.vomit(player);
                 }
@@ -54,7 +54,7 @@ public class ParticleEffects {
      */
     public static void applyBowel(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 if (afflicted.getAilment().isDisplayBowel()) {
                     ParticleFunctions.bowel(player);
                 }
@@ -69,7 +69,7 @@ public class ParticleEffects {
      */
     public static void applyUrinate(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 if (afflicted.getAilment().isDisplayUrinate()) {
                     ParticleFunctions.urinate(player);
                 }
@@ -84,7 +84,7 @@ public class ParticleEffects {
      */
     public static void applySweat(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 if (afflicted.getAilment().isDisplaySweat()) {
                     ParticleFunctions.sweat(player);
                 }

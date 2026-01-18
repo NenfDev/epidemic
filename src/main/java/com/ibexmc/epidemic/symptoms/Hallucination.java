@@ -194,7 +194,7 @@ public class Hallucination {
      */
     public static void applyHallucination(Player player, Afflicted afflicted) {
         if (player != null) {
-            if (!Permission.inBypass(player)  || player.getGameMode().equals(GameMode.CREATIVE)) {
+            if (!Permission.inBypass(player) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
                 if (afflicted.getAilment().isHallucination()) {
                     Random r = new Random();
                     int randomInt = r.nextInt(100) + 1;

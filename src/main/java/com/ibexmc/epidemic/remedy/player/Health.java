@@ -16,7 +16,7 @@ public class Health {
         try {
             if (amount > 0) {
                 // increase health
-                AttributeInstance maxHealthAttr = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+                AttributeInstance maxHealthAttr = player.getAttribute(Attribute.MAX_HEALTH);
                 double maxHealth = maxHealthAttr.getValue();
                 if (player.getHealth() + amount >= maxHealth) {
                     player.setHealth(maxHealth);

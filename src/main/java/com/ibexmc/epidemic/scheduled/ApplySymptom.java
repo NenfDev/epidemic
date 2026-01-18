@@ -6,7 +6,6 @@ import com.ibexmc.epidemic.dependencies.WorldGuard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import com.ibexmc.epidemic.ailments.Afflicted;
-import com.ibexmc.domain.Domain;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class ApplySymptom {
                                         "Run",
                                         "Player is in a WorldGuard protected area"
                                 );
-                                break;
+                                continue;
                             }
                         }
                         List<String> excludedRegions = plugin.config.getPreventSymptomWorldGuardRegions();
@@ -45,16 +44,15 @@ public class ApplySymptom {
                                         "Run",
                                         "Player is in a WorldGuard region where symptoms cannot be applied"
                                 );
-                                break;
+                                continue;
                             }
                         }
                     }
 
                     if (plugin.dependencies().hasDomain()) {
                         try {
-                            com.ibexmc.domain.api.API domain = plugin.dependencies().getDomain();
-                            com.ibexmc.domain.flag.Flag.Type flag = domain.flagFromName("EPIDEMIC_PREVENT_SYMPTOMS");
-                            if (domain.flagAtLocation(
+                            Object flag = plugin.dependencies().flagFromName("EPIDEMIC_PREVENT_SYMPTOMS");
+                            if (plugin.dependencies().flagAtLocation(
                                     flag,
                                     player.getLocation()
                             )
@@ -64,14 +62,14 @@ public class ApplySymptom {
                                         "Run",
                                         "Player is in a Domain field that prevents symptoms"
                                 );
-                                break;
+                                continue;
                             }
                         } catch (Exception ex) {
                             Logging.debug(
-                            "ApplySymptom",
+                                    "ApplySymptom",
                                     "Run",
-                                    "Unexpected error applying symptoms - " + ex.getMessage()
-                                    );
+                                    "Unexpected error checking Domain field - " + ex.getMessage()
+                            );
                         }
                     }
 

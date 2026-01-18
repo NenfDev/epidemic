@@ -23,7 +23,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import com.ibexmc.epidemic.util.functions.PlayerFunctions;
 import org.bukkit.inventory.ItemStack;
-import com.ibexmc.domain.Domain;
 
 
 import java.io.File;
@@ -219,9 +218,8 @@ public class AilmentManager {
 
         if (Epidemic.instance().dependencies().hasDomain()) {
             try {
-                com.ibexmc.domain.api.API domain = Epidemic.instance().dependencies().getDomain();
-                com.ibexmc.domain.flag.Flag.Type flag = domain.flagFromName("EPIDEMIC_PREVENT_AFFLICT");
-                if (domain.flagAtLocation(
+                Object flag = Epidemic.instance().dependencies().flagFromName("EPIDEMIC_PREVENT_AFFLICT");
+                if (Epidemic.instance().dependencies().flagAtLocation(
                         flag,
                         player.getLocation()
                 )
